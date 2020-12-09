@@ -1,17 +1,17 @@
 import React, { PureComponent } from 'react';
 
-import { Icon } from 'antd';
+// import { Icon } from 'antd';
 import Link from 'umi/link';
 import { getMenuMatches } from './SiderMenuUtils';
+import iconConfig from './config'
 import { isUrl } from '@/utils/utils';
-import menuIcon from '@/assets/menuIcon'
 import styles from './index.less';
 import { urlToList } from '../_utils/pathTools';
 
-const getIcon = (icon, className = 'icon') => {
+const getIcon = (icon, className = 'icon', isActive = false) => {
+  console.log(iconConfig)
   // const admin_icon = require('@/assets/menuIcon/icon_admin.png')
-  const admin_icon = require('@/assets/menuIcon/icon_admin.png')
-  return <img src={admin_icon} alt="icon" className={styles[className]} />;
+  return <img src={iconConfig[`${icon}${isActive ? 'Selected' : ''}`]} alt="icon" className={styles[className]} />;
   // if (typeof icon === 'string' && isUrl(icon)) {
   // }
   // if (typeof icon === 'string') {
@@ -21,6 +21,9 @@ const getIcon = (icon, className = 'icon') => {
 };
 
 export default class BaseMenu extends PureComponent {
+  state = {
+    selectParentMenu: ''
+  };
 
   conversionPath = path => {
     if (path && path.indexOf('http') === 0) {
@@ -35,7 +38,8 @@ export default class BaseMenu extends PureComponent {
       textAlign: 'left', borderBottom: '1px solid #bbb'
     }
     let className = styles.menuChildrenItem
-    if (openKeys.some(key => key === menuItem.path)) {
+    const isActive = openKeys.some(key => key === menuItem.path)
+    if (isActive) {
       className = styles.menuChildrenItemActive
     }
     const itemPath = this.conversionPath(menuItem.path);
@@ -48,7 +52,7 @@ export default class BaseMenu extends PureComponent {
           target={menuItem.target}
           replace={itemPath === location.pathname}
         >
-          {getIcon(menuItem.icon, 'childrenIcon')}
+          {getIcon(menuItem.icon, 'childrenIcon', isActive)}
           {menuItem.name}
         </Link>
       </div>
@@ -61,14 +65,15 @@ export default class BaseMenu extends PureComponent {
   }
 
   getNavMenuByParentItem = (menuItem, openKeys) => {
-    const style = { backgroundColor: '#3a3f44', padding: '40px 5px', textAlign: 'center', borderBottom: '1px solid #555' }
+    const style = { backgroundColor: '#3a3f44', padding: '40px 5px', textAlign: 'center', borderBottom: '1px solid #555', cursor: 'pointer' }
     let className = ''
-    if (openKeys.some(key => key === menuItem.path)) {
+    const isActive = openKeys.some(key => key === menuItem.path)
+    if (isActive) {
       className = styles.menuParentActive
     }
     return (
-      <div style={style} key={menuItem.name} className={className}>
-        {getIcon(menuItem.icon)}
+      <div style={style} key={menuItem.name} className={className} onClick={() => this.handleSelectMenu(menuItem.path)}>
+        {getIcon(menuItem.icon, 'icon', isActive)}
         <p>{menuItem.name}</p>
       </div>
     )
@@ -82,11 +87,21 @@ export default class BaseMenu extends PureComponent {
     return urlToList(pathname).map(itemPath => getMenuMatches(flatMenuKeys, itemPath).pop());
   };
 
+  handleSelectMenu (path) {
+    this.setState(() => ({
+      selectParentMenu: path
+    }));
+  };
+
   render () {
     const { menuData, openKeys, location: { pathname } } = this.props;
     let selectedKeys = this.getSelectedMenuKeys(pathname);
     if (!selectedKeys.length && openKeys) {
       selectedKeys = [openKeys[openKeys.length - 1]];
+    }
+    const { selectParentMenu } = this.state;
+    if (selectParentMenu) {
+      selectedKeys[0] = selectParentMenu
     }
     const leftStyle = { color: '#a4bcd6', float: 'left', width: '85px' }
     const rightStyle = { float: 'right', width: '200px', height: '100vh', borderLeft: '2px solid #bbb' }

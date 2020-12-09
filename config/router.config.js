@@ -18,28 +18,64 @@ export default [
     authority: ['admin', 'user'],
     routes: [
       // dashboard
-      { path: '/', redirect: '/dashboard/analysis' },
+      { path: '/', redirect: '/trend/info' },
       {
-        path: '/dashboard',
-        name: 'dashboard',
-        icon: 'dashboard',
+        path: '/settings',
+        name: 'settings',
+        icon: 'settings',
+      },
+      {
+        path: '/trend',
+        name: 'trend',
+        icon: 'data',
         routes: [
           {
-            path: '/dashboard/analysis',
-            name: 'analysis',
+            path: '/trend/info',
+            name: 'info',
+            icon: 'info',
             component: './Dashboard/Analysis',
           },
           {
-            path: '/dashboard/monitor',
+            path: '/trend/analysis',
+            name: 'analysis',
+            icon: 'trend',
+            component: './Dashboard/Analysis',
+          },
+          {
+            path: '/trend/monitor',
             name: 'monitor',
+            icon: 'function',
             component: './Dashboard/Monitor',
           },
           {
-            path: '/dashboard/workplace',
+            path: '/trend/workplace',
             name: 'workplace',
+            icon: 'wifi',
+            component: './Dashboard/Workplace',
+          },
+          {
+            path: '/trend/workplace1',
+            name: 'workplace1',
+            icon: 'changeWifi',
+            component: './Dashboard/Workplace',
+          },
+          {
+            path: '/trend/workplace2',
+            name: 'workplace2',
+            icon: 'identification',
             component: './Dashboard/Workplace',
           },
         ],
+      },
+      {
+        path: '/record',
+        name: 'record',
+        icon: 'record',
+      },
+      {
+        path: '/admin',
+        name: 'admin',
+        icon: 'admin',
       }
     ],
   },
