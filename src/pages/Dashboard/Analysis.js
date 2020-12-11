@@ -1,17 +1,16 @@
+import { Col, Dropdown, Icon, Menu, Row } from 'antd';
 import React, { Component, Suspense } from 'react';
-import { connect } from 'dva';
-import { Row, Col, Icon, Menu, Dropdown } from 'antd';
 
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
-import { getTimeDistance } from '@/utils/utils';
-
-import styles from './Analysis.less';
 import PageLoading from '@/components/PageLoading';
+import { connect } from 'dva';
+import { getTimeDistance } from '@/utils/utils';
+import styles from './Analysis.less';
 
-const IntroduceRow = React.lazy(() => import('./IntroduceRow'));
-const SalesCard = React.lazy(() => import('./SalesCard'));
-const TopSearch = React.lazy(() => import('./TopSearch'));
-const ProportionSales = React.lazy(() => import('./ProportionSales'));
+// const IntroduceRow = React.lazy(() => import('./IntroduceRow'));
+// const SalesCard = React.lazy(() => import('./SalesCard'));
+// const TopSearch = React.lazy(() => import('./TopSearch'));
+// const ProportionSales = React.lazy(() => import('./ProportionSales'));
 const OfflineData = React.lazy(() => import('./OfflineData'));
 
 @connect(({ chart, loading }) => ({
@@ -25,7 +24,7 @@ class Analysis extends Component {
     rangePickerValue: getTimeDistance('year'),
   };
 
-  componentDidMount() {
+  componentDidMount () {
     const { dispatch } = this.props;
     this.reqRef = requestAnimationFrame(() => {
       dispatch({
@@ -34,7 +33,7 @@ class Analysis extends Component {
     });
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     const { dispatch } = this.props;
     dispatch({
       type: 'chart/clear',
@@ -92,46 +91,46 @@ class Analysis extends Component {
     return '';
   };
 
-  render() {
-    const { rangePickerValue, salesType, currentTabKey } = this.state;
+  render () {
+    const { currentTabKey } = this.state;
     const { chart, loading } = this.props;
     const {
-      visitData,
-      visitData2,
-      salesData,
-      searchData,
+      // visitData,
+      // visitData2,
+      // salesData,
+      // searchData,
       offlineData,
       offlineChartData,
-      salesTypeData,
-      salesTypeDataOnline,
-      salesTypeDataOffline,
+      // salesTypeData,
+      // salesTypeDataOnline,
+      // salesTypeDataOffline,
     } = chart;
-    let salesPieData;
-    if (salesType === 'all') {
-      salesPieData = salesTypeData;
-    } else {
-      salesPieData = salesType === 'online' ? salesTypeDataOnline : salesTypeDataOffline;
-    }
-    const menu = (
-      <Menu>
-        <Menu.Item>操作一</Menu.Item>
-        <Menu.Item>操作二</Menu.Item>
-      </Menu>
-    );
+    // let salesPieData;
+    // if (salesType === 'all') {
+    //   salesPieData = salesTypeData;
+    // } else {
+    //   salesPieData = salesType === 'online' ? salesTypeDataOnline : salesTypeDataOffline;
+    // }
+    // const menu = (
+    //   <Menu>
+    //     <Menu.Item>操作一</Menu.Item>
+    //     <Menu.Item>操作二</Menu.Item>
+    //   </Menu>
+    // );
 
-    const dropdownGroup = (
-      <span className={styles.iconGroup}>
-        <Dropdown overlay={menu} placement="bottomRight">
-          <Icon type="ellipsis" />
-        </Dropdown>
-      </span>
-    );
+    // const dropdownGroup = (
+    //   <span className={styles.iconGroup}>
+    //     <Dropdown overlay={menu} placement="bottomRight">
+    //       <Icon type="ellipsis" />
+    //     </Dropdown>
+    //   </span>
+    // );
 
     const activeKey = currentTabKey || (offlineData[0] && offlineData[0].name);
 
     return (
       <GridContent>
-        <Suspense fallback={<PageLoading />}>
+        {/* <Suspense fallback={<PageLoading />}>
           <IntroduceRow loading={loading} visitData={visitData} />
         </Suspense>
         <Suspense fallback={null}>
@@ -144,8 +143,8 @@ class Analysis extends Component {
             selectDate={this.selectDate}
           />
         </Suspense>
-        <div className={styles.twoColLayout}>
-          <Row gutter={24}>
+        <div className={styles.twoColLayout}> */}
+        {/* <Row gutter={24}>
             <Col xl={12} lg={24} md={24} sm={24} xs={24}>
               <Suspense fallback={null}>
                 <TopSearch
@@ -169,7 +168,7 @@ class Analysis extends Component {
               </Suspense>
             </Col>
           </Row>
-        </div>
+        </div> */}
         <Suspense fallback={null}>
           <OfflineData
             activeKey={activeKey}
