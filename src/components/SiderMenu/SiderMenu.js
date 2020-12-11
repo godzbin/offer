@@ -8,7 +8,7 @@ import { getDefaultCollapsedSubMenus } from './SiderMenuUtils';
 import styles from './index.less';
 
 // const BaseMenu = React.lazy(() => import('./BaseMenu'));
-const BaseMenu = React.lazy(() => import('./BaseMenu2'));
+const BaseMenu = React.lazy(() => import('./BaseMenu'));
 const { Sider } = Layout;
 
 export default class SiderMenu extends PureComponent {

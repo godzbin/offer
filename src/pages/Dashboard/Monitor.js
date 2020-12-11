@@ -1,15 +1,15 @@
+import { Card, Col, Row, Tooltip } from 'antd';
+import { FormattedMessage, formatMessage } from 'umi/locale';
+import { Gauge, Pie, TagCloud, WaterWave } from '@/components/Charts';
 import React, { PureComponent } from 'react';
-import { connect } from 'dva';
-import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Row, Col, Card, Tooltip } from 'antd';
-import { Pie, WaterWave, Gauge, TagCloud } from '@/components/Charts';
-import NumberInfo from '@/components/NumberInfo';
-import CountDown from '@/components/CountDown';
-import ActiveChart from '@/components/ActiveChart';
-import numeral from 'numeral';
-import GridContent from '@/components/PageHeaderWrapper/GridContent';
 
 import Authorized from '@/utils/Authorized';
+// import CountDown from '@/components/CountDown';
+import GridContent from '@/components/PageHeaderWrapper/GridContent';
+import NumberInfo from '@/components/NumberInfo';
+import { connect } from 'dva';
+// import ActiveChart from '@/components/ActiveChart';
+import numeral from 'numeral';
 import styles from './Monitor.less';
 
 const { Secured } = Authorized;
@@ -28,14 +28,14 @@ const havePermissionAsync = new Promise(resolve => {
   loading: loading.models.monitor,
 }))
 class Monitor extends PureComponent {
-  componentDidMount() {
+  componentDidMount () {
     const { dispatch } = this.props;
     dispatch({
       type: 'monitor/fetchTags',
     });
   }
 
-  render() {
+  render () {
     const { monitor, loading } = this.props;
     const { tags } = monitor;
 
@@ -84,7 +84,7 @@ class Monitor extends PureComponent {
                         defaultMessage="Remaining time of activity"
                       />
                     }
-                    total={<CountDown target={targetTime} />}
+                    total={1}
                   />
                 </Col>
                 <Col md={6} sm={12} xs={24}>
@@ -118,18 +118,6 @@ class Monitor extends PureComponent {
             </Card>
           </Col>
           <Col xl={6} lg={24} md={24} sm={24} xs={24}>
-            <Card
-              title={
-                <FormattedMessage
-                  id="app.monitor.activity-forecast"
-                  defaultMessage="Activity forecast"
-                />
-              }
-              style={{ marginBottom: 24 }}
-              bordered={false}
-            >
-              <ActiveChart />
-            </Card>
             <Card
               title={<FormattedMessage id="app.monitor.efficiency" defaultMessage="Efficiency" />}
               style={{ marginBottom: 24 }}

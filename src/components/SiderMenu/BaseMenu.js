@@ -1,114 +1,20 @@
 import React, { PureComponent } from 'react';
-import classNames from 'classnames';
-import { Menu, Icon } from 'antd';
+
+// import { Icon } from 'antd';
 import Link from 'umi/link';
-import { urlToList } from '../_utils/pathTools';
 import { getMenuMatches } from './SiderMenuUtils';
-import { isUrl } from '@/utils/utils';
+import iconConfig from './config'
+// import { isUrl } from '@/utils/utils';
 import styles from './index.less';
+import { urlToList } from '../_utils/pathTools';
 
-const { SubMenu } = Menu;
-
-// Allow menu.js config icon as string or ReactNode
-//   icon: 'setting',
-//   icon: 'http://demo.com/icon.png',
-//   icon: <Icon type="setting" />,
-const getIcon = icon => {
-  if (typeof icon === 'string' && isUrl(icon)) {
-    return <img src={icon} alt="icon" className={styles.icon} />;
-  }
-  if (typeof icon === 'string') {
-    return <Icon type={icon} />;
-  }
-  return icon;
+const getIcon = (icon, className = 'icon', isActive = false) => {
+  return <img src={iconConfig[`${icon}${isActive ? 'Selected' : ''}`]} alt="icon" className={styles[className]} />;
 };
 
 export default class BaseMenu extends PureComponent {
-  /**
-   * 获得菜单子节点
-   * @memberof SiderMenu
-   */
-  getNavMenuItems = (menusData, parent) => {
-    if (!menusData) {
-      return [];
-    }
-    return menusData
-      .filter(item => item.name && !item.hideInMenu)
-      .map(item => this.getSubMenuOrItem(item, parent))
-      .filter(item => item);
-  };
-
-  // Get the currently selected menu
-  getSelectedMenuKeys = pathname => {
-    const { flatMenuKeys } = this.props;
-    return urlToList(pathname).map(itemPath => getMenuMatches(flatMenuKeys, itemPath).pop());
-  };
-
-  /**
-   * get SubMenu or Item
-   */
-  getSubMenuOrItem = item => {
-    // doc: add hideChildrenInMenu
-    if (item.children && !item.hideChildrenInMenu && item.children.some(child => child.name)) {
-      const { name } = item;
-      return (
-        <SubMenu
-          title={
-            item.icon ? (
-              <span>
-                {getIcon(item.icon)}
-                <span>{name}</span>
-              </span>
-            ) : (
-              name
-            )
-          }
-          key={item.path}
-        >
-          {this.getNavMenuItems(item.children)}
-        </SubMenu>
-      );
-    }
-    return <Menu.Item key={item.path}>{this.getMenuItemPath(item)}</Menu.Item>;
-  };
-
-  /**
-   * 判断是否是http链接.返回 Link 或 a
-   * Judge whether it is http link.return a or Link
-   * @memberof SiderMenu
-   */
-  getMenuItemPath = item => {
-    const { name } = item;
-    const itemPath = this.conversionPath(item.path);
-    const icon = getIcon(item.icon);
-    const { target } = item;
-    // Is it a http link
-    if (/^https?:\/\//.test(itemPath)) {
-      return (
-        <a href={itemPath} target={target}>
-          {icon}
-          <span>{name}</span>
-        </a>
-      );
-    }
-    const { location, isMobile, onCollapse } = this.props;
-    return (
-      <Link
-        to={itemPath}
-        target={target}
-        replace={itemPath === location.pathname}
-        onClick={
-          isMobile
-            ? () => {
-                onCollapse(true);
-              }
-            : undefined
-        }
-      >
-        {icon}
-        <span>{name}</span>
-      </Link>
-    );
+  state = {
+    selectParentMenu: ''
   };
 
   conversionPath = path => {
@@ -118,44 +24,89 @@ export default class BaseMenu extends PureComponent {
     return `/${path || ''}`.replace(/\/+/g, '/');
   };
 
-  render() {
-    const {
-      openKeys,
-      theme,
-      mode,
-      location: { pathname },
-      className,
-      collapsed,
-    } = this.props;
-    // if pathname can't match, use the nearest parent's key
+  getNavMenuByChildrenItem = (menuItem, openKeys) => {
+    const style = {
+      padding: '20px 0px 20px 30px',
+      textAlign: 'left', borderBottom: '1px solid #bbb'
+    }
+    let className = styles.menuChildrenItem
+    const isActive = openKeys.some(key => key === menuItem.path)
+    if (isActive) {
+      className = styles.menuChildrenItemActive
+    }
+    const itemPath = this.conversionPath(menuItem.path);
+    const { location } = this.props;
+    return (
+
+      <div style={style} className={className} key={menuItem.path}>
+        <Link
+          to={itemPath}
+          target={menuItem.target}
+          replace={itemPath === location.pathname}
+        >
+          {getIcon(menuItem.icon, 'childrenIcon', isActive)}
+          {menuItem.name}
+        </Link>
+      </div>
+    )
+  }
+
+  getNavMenuByChildren = (menuData, openKeys) => {
+    const { children = [] } = menuData.find(item => openKeys.includes(item.path)) || {}
+    return children.map(item => this.getNavMenuByChildrenItem(item, openKeys))
+  }
+
+  getNavMenuByParentItem = (menuItem, openKeys) => {
+    const style = { backgroundColor: '#3a3f44', padding: '40px 5px', textAlign: 'center', borderBottom: '1px solid #555', cursor: 'pointer' }
+    let className = ''
+    const isActive = openKeys.some(key => key === menuItem.path)
+    if (isActive) {
+      className = styles.menuParentActive
+    }
+    return (
+      <div style={style} key={menuItem.name} className={className} onClick={() => this.handleSelectMenu(menuItem.path)}>
+        {getIcon(menuItem.icon, 'icon', isActive)}
+        <p>{menuItem.name}</p>
+      </div>
+    )
+  };
+
+  getNavMenuByParent = (menuData, openKeys) => menuData.map((item) => this.getNavMenuByParentItem(item, openKeys))
+
+  // Get the currently selected menu
+  getSelectedMenuKeys = pathname => {
+    const { flatMenuKeys } = this.props;
+    return urlToList(pathname).map(itemPath => getMenuMatches(flatMenuKeys, itemPath).pop());
+  };
+
+  handleSelectMenu (path) {
+    this.setState(() => ({
+      selectParentMenu: path
+    }));
+  };
+
+  render () {
+    const { menuData, openKeys, location: { pathname } } = this.props;
     let selectedKeys = this.getSelectedMenuKeys(pathname);
     if (!selectedKeys.length && openKeys) {
       selectedKeys = [openKeys[openKeys.length - 1]];
     }
-    let props = {};
-    if (openKeys && !collapsed) {
-      props = {
-        openKeys: openKeys.length === 0 ? [...selectedKeys] : openKeys,
-      };
+    const { selectParentMenu } = this.state;
+    if (selectParentMenu) {
+      selectedKeys[0] = selectParentMenu
     }
-    const { handleOpenChange, style, menuData } = this.props;
-    const cls = classNames(className, {
-      'top-nav-menu': mode === 'horizontal',
-    });
-
+    const leftStyle = { color: '#a4bcd6', float: 'left', width: '85px' }
+    const rightStyle = { float: 'right', width: '200px', height: 'calc(100vh - 90px)', borderLeft: '2px solid #bbb' }
     return (
-      <Menu
-        key="Menu"
-        mode={mode}
-        theme={theme}
-        onOpenChange={handleOpenChange}
-        selectedKeys={selectedKeys}
-        style={style}
-        className={cls}
-        {...props}
-      >
-        {this.getNavMenuItems(menuData)}
-      </Menu>
+      // 左边主菜单
+      <div>
+        <div style={leftStyle}>
+          {this.getNavMenuByParent(menuData, selectedKeys)}
+        </div>
+        <div style={rightStyle} className={styles.menuChildrenItem}>
+          {this.getNavMenuByChildren(menuData, selectedKeys)}
+        </div>
+      </div>
     );
   }
 }

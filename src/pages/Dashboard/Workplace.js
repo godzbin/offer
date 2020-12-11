@@ -1,13 +1,12 @@
+import { Avatar, Card, Col, List, Row } from 'antd';
 import React, { PureComponent } from 'react';
-import moment from 'moment';
-import { connect } from 'dva';
+
 import Link from 'umi/link';
-import { Row, Col, Card, List, Avatar } from 'antd';
-
-import { Radar } from '@/components/Charts';
-import EditableLinkGroup from '@/components/EditableLinkGroup';
+// import EditableLinkGroup from '@/components/EditableLinkGroup';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-
+import { Radar } from '@/components/Charts';
+import { connect } from 'dva';
+import moment from 'moment';
 import styles from './Workplace.less';
 
 const links = [
@@ -47,7 +46,7 @@ const links = [
   activitiesLoading: loading.effects['activities/fetchList'],
 }))
 class Workplace extends PureComponent {
-  componentDidMount() {
+  componentDidMount () {
     const { dispatch } = this.props;
     dispatch({
       type: 'user/fetchCurrent',
@@ -63,14 +62,14 @@ class Workplace extends PureComponent {
     });
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     const { dispatch } = this.props;
     dispatch({
       type: 'chart/clear',
     });
   }
 
-  renderActivities() {
+  renderActivities () {
     const {
       activities: { list },
     } = this.props;
@@ -107,7 +106,7 @@ class Workplace extends PureComponent {
     });
   }
 
-  render() {
+  render () {
     const {
       currentUser,
       currentUserLoading,
@@ -215,7 +214,7 @@ class Workplace extends PureComponent {
               bordered={false}
               bodyStyle={{ padding: 0 }}
             >
-              <EditableLinkGroup onAdd={() => {}} links={links} linkElement={Link} />
+              {/* <EditableLinkGroup onAdd={() => {}} links={links} linkElement={Link} /> */}
             </Card>
             <Card
               style={{ marginBottom: 24 }}
