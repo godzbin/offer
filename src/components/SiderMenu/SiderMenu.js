@@ -56,9 +56,14 @@ export default class SiderMenu extends PureComponent {
       [styles.fixSiderbar]: fixSiderbar,
       [styles.light]: theme === 'light',
     });
-    console.log(this.props)
     return (
       <Sider
+        style={{
+          overflow: 'auto',
+          height: '100vh',
+          position: 'fixed',
+          left: 0,
+        }}
         trigger={null}
         collapsible
         collapsed={collapsed}
