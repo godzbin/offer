@@ -1,0 +1,5 @@
+{
+  "code": 200,
+  "message": "OK",
+  "data": "[{\"id\": 1607759848110, \"max\": 100, \"min\": 0, \"name\": \"温度\", \"color\": \"#000\", \"bindKey\": [\"TestUnitW\", \"RatedTestUnitW\", \"TestUnitWRatio\", \"TestUnitCapacity\", \"RatedTestUnitCapacity\", \"TestUnitCapacityRatio\", \"EERCOP\", \"RatedEERCOP\", \"EERCOPRatio\", \"PowerMeterAVoltage1\", \"PowerMeterAVoltage2\", \"PowerMeterAVoltage3\", \"PowerMeterAVoltage4\"], \"showAxis\": true, \"showName\": true}]"
+}

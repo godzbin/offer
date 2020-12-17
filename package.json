@@ -39,12 +39,14 @@
     "chalk": "^2.4.2",
     "classnames": "^2.2.6",
     "dva": "^2.4.0",
+    "echarts": "^4.2.1",
+    "echarts-for-react": "^2.0.15-beta.1",
     "enquire-js": "^0.2.1",
     "hash.js": "^1.1.5",
     "lodash": "^4.17.10",
     "lodash-decorators": "^6.0.0",
     "memoize-one": "^5.0.0",
-    "moment": "^2.22.2",
+    "moment": "^2.29.1",
     "numeral": "^2.0.6",
     "nzh": "^1.0.3",
     "omit.js": "^1.0.0",
@@ -53,17 +55,19 @@
     "qs": "^6.6.0",
     "rc-animate": "^2.4.4",
     "react": "^16.6.3",
+    "react-color": "^2.19.3",
     "react-container-query": "^0.11.0",
     "react-copy-to-clipboard": "^5.0.1",
     "react-document-title": "^2.0.3",
     "react-dom": "^16.6.3",
     "react-fittext": "^1.0.0",
     "react-media": "^1.8.0",
-    "react-router-dom": "^4.3.1"
+    "react-router-dom": "^4.3.1",
+    "tinycolor2": "^1.4.2"
   },
   "devDependencies": {
     "@types/react": "^16.7.7",
-    "@types/react-dom": "^16.0.10",
+    "@types/react-dom": "16.9.7",
     "antd-pro-merge-less": "^1.0.0",
     "antd-theme-webpack-plugin": "^1.1.8",
     "babel-eslint": "^10.0.1",
@@ -125,10 +129,5 @@
     "src/**/*.less",
     "config/**/*.js*",
     "scripts/**/*.js"
-  ],
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint-staged"
-    }
-  }
+  ]
 }

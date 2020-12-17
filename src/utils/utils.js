@@ -1,7 +1,16 @@
-import moment from 'moment';
-import React from 'react';
-import nzh from 'nzh/cn';
 import { parse, stringify } from 'qs';
+
+import React from 'react';
+import moment from 'moment';
+import nzh from 'nzh/cn';
+import tinycolor from 'tinycolor2';
+
+// hex 转RGBA
+export function hexToRgba(hex, alpha) {
+  return tinycolor(hex)
+    .setAlpha(alpha)
+    .toRgbString();
+}
 
 export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
