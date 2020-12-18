@@ -16,9 +16,8 @@ class LineChart extends Component {
     this.dataZoomWidth = 15;
   }
 
-  componentDidMount() {
+  componentDidMount () {
     const chart = this.getChart();
-    console.log(chart);
     if (!chart || chart) {
       return;
     }
@@ -30,7 +29,7 @@ class LineChart extends Component {
       dataZoomSelectActive: true,
     });
     // 防抖
-    function debounce(fn, wait) {
+    function debounce (fn, wait) {
       let timer = null;
       return () => {
         if (timer) {
@@ -60,20 +59,19 @@ class LineChart extends Component {
   }
 
   // 每次更新数据时，刷新echart
-  shouldComponentUpdate() {
+  shouldComponentUpdate () {
     setTimeout(() => {
       this.resetChartOption();
     }, 100);
     return false;
   }
 
-  getChart() {
-    console.log(this.echartsInstance);
+  getChart () {
     return this.echartsInstance ? this.echartsInstance.getEchartsInstance() : false;
   }
 
   // 获取数据筛选轴的位置
-  getDataZoom(options, item, length, index) {
+  getDataZoom (options, item, length, index) {
     return [
       {
         ...options.dataZoom.find(y => y.id === `yAxis${item.id}`),
@@ -149,7 +147,7 @@ class LineChart extends Component {
     });
   };
 
-  getToolbox() {
+  getToolbox () {
     const {
       onShowYAxis,
       // onShowXAxis
@@ -158,6 +156,7 @@ class LineChart extends Component {
 
     return {
       show: true,
+      left: 0,
       feature: {
         dataZoom: {
           show: true,
@@ -193,7 +192,7 @@ class LineChart extends Component {
     };
   }
 
-  getOption() {
+  getOption () {
     // const { data } = this.props;
     const { isShowTooltip } = this.state;
     const yAxis = this.getShowYAxis();
@@ -213,16 +212,19 @@ class LineChart extends Component {
           type: 'time',
         },
       ],
+      // backgroundColor: '#000',
       grid: {
+        show: true,
         left: yAxis.length * this.yWidth,
         right: 30,
         bottom: 80,
+        backgroundColor: 'rgb(33, 33, 33)'
       },
       yAxis: [
         {
           name: '',
           axisLine: {},
-          position: 'left',
+          position: 'left'
         },
       ],
       dataZoom: [
@@ -243,7 +245,7 @@ class LineChart extends Component {
     };
   }
 
-  resetChartOption() {
+  resetChartOption () {
     const chart = this.getChart();
     if (chart) {
       const yAxis = this.getShowYAxis();
@@ -251,13 +253,11 @@ class LineChart extends Component {
       const options = chart.getOption();
       const [xZoom = {}, xInZoom = {}] = options.dataZoom;
       const dataZoom = yAxis.reduce(
-        (result, item, index) => {
-          return result.concat(this.getDataZoom(options, item, yAxisLength, index));
-        },
+        (result, item, index) => result.concat(this.getDataZoom(options, item, yAxisLength, index)),
         [xZoom, xInZoom]
       );
-      const series = yAxis.reduce((result, { bindKeyData = [] }, index) => {
-        return result.concat(
+      const series = yAxis.reduce((result, { bindKeyData = [] }, index) =>
+        result.concat(
           bindKeyData.map(item => {
             return {
               ...item,
@@ -267,41 +267,43 @@ class LineChart extends Component {
               hoverAnimation: false,
             };
           })
-        );
-      }, []);
+        ), []);
+      console.log(options.grid)
       // if (options.series.length !== series.length) {
       chart.setOption(
         {
           ...options,
           dataZoom,
           grid: {
+            ...options.grid[0],
             left: yAxis.length * this.yWidth,
             right: 30,
             bottom: 80,
           },
           yAxis: yAxis.length
             ? yAxis.map((item, index) => {
-                return {
-                  name: item.showName ? item.name : '',
-                  min: item.min,
-                  max: item.max,
-                  axisLine: {
-                    lineStyle: {
-                      color: item.color,
-                    },
+              const offset = index * this.yWidth + this.dataZoomWidth
+              return {
+                name: item.showName ? item.name : '',
+                min: item.min,
+                max: item.max,
+                axisLine: {
+                  lineStyle: {
+                    color: item.color,
                   },
-                  splitLine: {
-                    show: !index,
-                  },
-                  offset: index * this.yWidth + this.dataZoomWidth,
-                  position: 'left',
-                };
-              })
-            : {
-                name: '',
-                axisLine: {},
+                },
+                splitLine: {
+                  show: !index,
+                },
+                offset,
                 position: 'left',
-              },
+              };
+            })
+            : {
+              name: '',
+              axisLine: {},
+              position: 'left',
+            },
           series,
         },
         true
@@ -310,10 +312,10 @@ class LineChart extends Component {
     }
   }
 
-  render() {
-    const { height } = this.props;
+  render () {
+    // const { height } = this.props;
     return (
-      <div>
+      <div style={{ height: `100%`, width: '100%' }}>
         {/* <Chart
           ref={e => { 
           console.log(e)
@@ -325,10 +327,9 @@ class LineChart extends Component {
         {/* {JSON.stringify(currDatazoom)} */}
         <ReactEcharts
           ref={e => {
-            console.log(e, 111);
             this.echartsInstance = e;
           }}
-          style={{ height: `${height}px`, width: '100%' }}
+          style={{ height: `100%`, width: '100%' }}
           option={this.getOption()}
         />
       </div>

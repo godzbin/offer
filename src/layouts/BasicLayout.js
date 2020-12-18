@@ -188,6 +188,7 @@ class BasicLayout extends React.PureComponent {
             minHeight: '100vh',
             marginLeft: 285
           }}
+          className={styles.layoutContent}
         >
           {/* <Header
             menuData={menuData}

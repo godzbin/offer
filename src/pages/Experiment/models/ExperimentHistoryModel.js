@@ -8,7 +8,7 @@ import {
 } from '../api/ExperimentHistoryApi';
 
 // 将数据提前合并为图表需要的数据
-function setYAxisSettingData(state) {
+function setYAxisSettingData (state) {
   const { yAxisSetting, data } = state;
   return yAxisSetting.map(item => {
     const { bindKey = [] } = item;
@@ -27,7 +27,7 @@ function setYAxisSettingData(state) {
   });
 }
 // 将数据转换为图表需要的格式
-function exchangeDataToChart(result = [], list = [], names = []) {
+function exchangeDataToChart (result = [], list = [], names = []) {
   list.forEach(({ createTime, data = [] }) => {
     const valueList = JSON.parse(data);
     valueList.forEach(node => {
@@ -57,23 +57,23 @@ export default {
   state: {
     // y轴配置数据
     yAxisSetting: [
-      // {
-      //   id: 1,
-      //   name: '温度',
-      //   showAxis: true,
-      //   showName: true,
-      //   max: 100,
-      //   min: 0,
-      //   color: '#f00',
-      //   bindKey: [
-      //     // 'AirAEnteringDB',
-      //     // 'AirAEnteringWB',
-      //     // 'AirALeavingDB',
-      //     // 'AirALeavingWB',
-      //     // 'AirBEnteringDB',
-      //     // 'AirBEnteringWB',
-      //   ],
-      // },
+      {
+        id: 1,
+        name: '温度',
+        showAxis: true,
+        showName: true,
+        max: 100,
+        min: 0,
+        color: '#f00',
+        bindKey: [
+          // 'AirAEnteringDB',
+          // 'AirAEnteringWB',
+          // 'AirALeavingDB',
+          // 'AirALeavingWB',
+          // 'AirBEnteringDB',
+          // 'AirBEnteringWB',
+        ],
+      },
     ],
     // 当前试验所有数据
     data: [],
@@ -89,7 +89,7 @@ export default {
 
   effects: {
     // 初始化获取配置及数据
-    *init({ payload, callback }, { put, take }) {
+    *init ({ payload, callback }, { put, take }) {
       yield put({ type: 'getSetting', payload: payload.id });
       yield take('getSetting/@@end');
       yield put({ type: 'getHistoryData', payload });
@@ -97,7 +97,7 @@ export default {
       if (callback) callback();
     },
     // 获取历史数据
-    *getHistoryData({ payload, callback }, { put, call }) {
+    *getHistoryData ({ payload, callback }, { put, call }) {
       const [names, data] = yield [call(getKeyName, payload), call(getHistoryData, payload)];
       yield put({
         type: 'setHistoryData',
@@ -109,19 +109,19 @@ export default {
       if (callback) callback();
     },
     // 获取实时数据
-    *getLiveData({ payload, callback }, { call }) {
+    *getLiveData ({ payload, callback }, { call }) {
       const data = yield call(getHistoryData, payload);
       if (callback) callback(data);
     },
     // 修改Y轴绑定的Key值
-    *changeBindKey({ payload }, { put }) {
+    *changeBindKey ({ payload }, { put }) {
       yield put({
         type: 'setBindKey',
         payload,
       });
     },
     // 通过ID获取y轴数据
-    *getAxisDataById({ payload }, { select, put }) {
+    *getAxisDataById ({ payload }, { select, put }) {
       const data = yield select(state => state.experimentHistory.yAxisSetting);
       yield put({
         type: 'setEditAxisData',
@@ -129,7 +129,7 @@ export default {
       });
     },
     // 获取配置信息
-    *getSetting({ payload }, { call, put }) {
+    *getSetting ({ payload }, { call, put }) {
       const { data, createTime } = yield call(getSetting, payload);
       yield put({
         type: 'setSetting',
@@ -146,7 +146,7 @@ export default {
      * @param {*} payload: 试验ID
      * @param {*} param1
      */
-    *getYSetting({ payload }, { call, put }) {
+    *getYSetting ({ payload }, { call, put }) {
       const data = yield call(getYSetting, payload);
       yield put({
         type: 'setYSetting',
@@ -159,7 +159,7 @@ export default {
      * @param {} param0 ：所有y轴配置 {id, data}
      * @param {*} param1
      */
-    *updateYSetting({ payload }, { call, put }) {
+    *updateYSetting ({ payload }, { call, put }) {
       yield call(setYSetting, payload);
       yield put({
         type: 'getYSetting',
@@ -175,7 +175,7 @@ export default {
      * @param {*} state
      * @param {*}  payload {}
      */
-    setYSetting(state, { payload }) {
+    setYSetting (state, { payload }) {
       const yAxisSettingNew = setYAxisSettingData({
         data: state.data,
         yAxisSetting: JSON.parse(JSON.stringify(payload)),
@@ -185,7 +185,7 @@ export default {
         yAxisSetting: yAxisSettingNew,
       };
     },
-    setHistoryData(state, { payload }) {
+    setHistoryData (state, { payload }) {
       const {
         data: { list = [] },
         names,
@@ -203,7 +203,7 @@ export default {
         yAxisSetting: yAxisSettingNew,
       };
     },
-    removeAxisDataById(state, { payload }) {
+    removeAxisDataById (state, { payload }) {
       const { yAxisSetting } = state;
       const newYAisSetting = yAxisSetting.filter(item => item.id !== payload);
       return {
@@ -211,7 +211,7 @@ export default {
         yAxisSetting: newYAisSetting,
       };
     },
-    appendData(state, { payload }) {
+    appendData (state, { payload }) {
       const { list = [] } = payload;
       const { names } = state;
       const result = state.data;
@@ -220,7 +220,7 @@ export default {
         data: exchangeDataToChart(result, list, names),
       };
     },
-    setBindKey(state, { payload }) {
+    setBindKey (state, { payload }) {
       const { yAxisSetting, data } = state;
       const { id, bindKey = [] } = payload;
       const lineIndex = yAxisSetting.findIndex(yAxis => yAxis.id === id);
@@ -237,17 +237,17 @@ export default {
         yAxisSetting: yAxisSettingNew,
       };
     },
-    setEditAxisData(state, { payload }) {
+    setEditAxisData (state, { payload }) {
       return Object.assign({}, state, {
         editAxis: payload,
       });
     },
-    updateEditAxis(state, { payload }) {
+    updateEditAxis (state, { payload }) {
       return Object.assign({}, state, {
         editAxis: Object.assign({}, state.editAxis, payload),
       });
     },
-    updateAxis(state, { payload }) {
+    updateAxis (state, { payload }) {
       const { yAxisSetting } = state;
       const axisIndex = yAxisSetting.findIndex(yAxis => yAxis.id === payload.id);
       yAxisSetting[axisIndex] = Object.assign({}, state.yAxisSetting[axisIndex], payload);
@@ -256,7 +256,7 @@ export default {
         yAxisSetting,
       };
     },
-    addAxis(state, { payload }) {
+    addAxis (state, { payload }) {
       const { yAxisSetting } = state;
       yAxisSetting.push(
         Object.assign(
@@ -272,12 +272,12 @@ export default {
         yAxisSetting,
       };
     },
-    setSetting(state, { payload }) {
+    setSetting (state, { payload }) {
       return Object.assign({}, state, {
         setting: payload,
       });
     },
-    setCreateTime(state, { payload }) {
+    setCreateTime (state, { payload }) {
       return {
         ...state,
         createTime: payload,

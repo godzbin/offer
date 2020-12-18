@@ -1,4 +1,4 @@
-import { Card, Col, Row, Table, Tabs } from 'antd';
+import { Card, Checkbox, Col, Row, Table, Tabs } from 'antd';
 import React, { PureComponent } from 'react';
 
 import AlarmSettingModal from './components/AlarmSettingModal';
@@ -12,6 +12,8 @@ import moment from 'moment';
 import numeral from 'numeral';
 // import { chain } from 'mathjs'
 import styles from './History.less';
+
+const CheckboxGroup = Checkbox.Group;
 
 const { TabPane } = Tabs;
 const columns = [
@@ -69,7 +71,6 @@ class History extends PureComponent {
       axisModalVisible: false,
       timeAxisModalVisible: false,
       alarmSettingVisible: false,
-      isShowDetail: false,
       // startTime: moment('2020-05-09 05:47:46'),
       appendTime: moment('2020-05-09 05:25:50'),
     };
@@ -77,8 +78,7 @@ class History extends PureComponent {
     this.timeIndex = '';
   }
 
-  async componentDidMount() {
-    console.log(this.lineChart, 11111);
+  async componentDidMount () {
     clearTimeout(this.timeIndex);
     const {
       dispatch,
@@ -108,11 +108,11 @@ class History extends PureComponent {
     });
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     clearTimeout(this.timeIndex);
   }
 
-  async setChartData(data) {
+  async setChartData (data) {
     const { dispatch } = this.props;
     await dispatch({
       type: 'experimentHistory/appendData',
@@ -121,7 +121,7 @@ class History extends PureComponent {
     if (this.lineChart) this.lineChart.onChange();
   }
 
-  getColorList() {
+  getColorList () {
     const chart = this.lineChart.getChart();
     const { _seriesIndices } = chart.getModel();
     // 获取颜色
@@ -161,30 +161,35 @@ class History extends PureComponent {
     });
   };
 
+  // 显示报警弹窗
   showAlarmSettingModal = () => {
     this.setState({
       alarmSettingVisible: true,
     });
   };
 
+  // 取消数轴配置窗
   onCancelAxisModal = () => {
     this.setState({
       axisModalVisible: false,
     });
   };
 
+  // 取消时间轴配置窗
   onCancelTimeAxisModal = () => {
     this.setState({
       timeAxisModalVisible: false,
     });
   };
 
+  // 取消报警弹窗
   onCancelAlarmSettingModal = () => {
     this.setState({
       alarmSettingVisible: false,
     });
   };
 
+  // 根据当前datazoom数据过滤试验数据
   filterData = datazoom => {
     const xRange = datazoom.find(item => item.type === 'x');
     const colorList = this.getColorList();
@@ -241,13 +246,6 @@ class History extends PureComponent {
       appendTime: lastTime,
     });
     return result;
-  };
-
-  showDetail = () => {
-    const { isShowDetail } = this.state;
-    this.setState({
-      isShowDetail: !isShowDetail,
-    });
   };
 
   getInfo = setting => {
@@ -309,7 +307,7 @@ class History extends PureComponent {
     if (this.lineChart) this.lineChart.onChange();
   };
 
-  runLiveData() {
+  runLiveData = () => {
     this.timeIndex = setTimeout(() => {
       const { appendTime } = this.state;
       // this.setState({
@@ -330,16 +328,62 @@ class History extends PureComponent {
         },
       });
     }, 1000);
+  };
+
+  getList = () => Array.from({ length: 50 }, (_, index) => ({
+    label: `曲线${index}`,
+    value: (100 * Math.random()).toFixed(2),
+    unit: 'V',
+    color: '#f00'
+  }))
+
+  renderSelect = () => {
+    const list = this.getList();
+    return (
+      <div>
+        <Checkbox>
+          全选
+        </Checkbox>
+        {/* <CheckboxGroup options={list} /> */}
+        {list.map((item) => (
+          <div key={item.label} style={{ paddingTop: 10 }}>
+            <Checkbox>
+              <span
+                style={{
+                  background: item.color,
+                  display: 'inline-block',
+                  width: 15,
+                  height: 15
+                }}
+              > </span>
+              {item.label}
+            </Checkbox>
+          </div>
+        ))}
+      </div>
+    )
   }
 
-  render() {
+  renderLineInfo = () => {
+    const list = this.getList()
+    return list.map((item) => (
+      <div className={styles.detailDataChild} key={item.label}>
+        <h3 className={styles.detailDataChildTitle}>{item.label}</h3>
+        <div className={styles.detailDataChildContent}>
+          <p className={styles.detailDataChildContentValue}>{item.value}</p>
+          <span className={styles.detailDataChildContentUnit}>{item.unit}</span>
+        </div>
+      </div>
+    ))
+  }
+
+  render () {
     const {
-      statisticsList,
-      timeDiff,
+      // statisticsList,
+      // timeDiff,
       axisModalVisible,
       timeAxisModalVisible,
-      alarmSettingVisible,
-      isShowDetail,
+      alarmSettingVisible
     } = this.state;
     const {
       experimentHistory: { yAxisSetting, data, setting },
@@ -347,73 +391,49 @@ class History extends PureComponent {
         params: { link = '1', id = '' },
       },
     } = this.props;
-    const info = this.getInfo(setting);
-    const settingFilter = this.getSettingList(setting);
+    // const info = this.getInfo(setting);
+    // const settingFilter = this.getSettingList(setting);
     return (
-      <Card bordered={false} title={`试验${link === '1' ? '历史' : '实时'}数据曲线`}>
-        <Table
-          rowKey="TestID"
-          bordered
-          pagination={false}
-          columns={columns.map(item => ({ ...item, ellipsis: true, align: 'center' }))}
-          dataSource={[info]}
-          style={{ marginBottom: 20 }}
-        />
-        <Row>
-          <Col span={isShowDetail ? 18 : 24} className={styles.detailInfo}>
-            <Card>
-              <LineChart
-                ref={e => {
-                  this.lineChart = e;
-                }}
-                height={508}
-                data={data}
-                yAxis={yAxisSetting}
-                filterData={this.filterData}
-                onShowYAxis={this.showAxisModal}
-                onShowXAxis={this.showTimeAxisModal}
-              />
-            </Card>
-            <div className={styles.showInfoBtn} onClick={this.showDetail}>
-              {isShowDetail ? '收起' : '显示'}详情
-            </div>
-          </Col>
-          <Col span={isShowDetail ? 6 : 0}>
-            <Card bodyStyle={{ padding: 0 }}>
-              <Tabs>
-                <TabPane tab="实时统计" key="1">
-                  <StatisticsList
-                    link={link}
-                    data={statisticsList}
-                    diff={timeDiff}
-                    onSelectChange={this.onSelectChange}
-                  />
-                </TabPane>
-                <TabPane tab="试验设定" key="2">
-                  <Table
-                    pagination={false}
-                    columns={[
-                      { title: '设定名', key: 'name', dataIndex: 'name' },
-                      // { title: 'key', key: 'key', dataIndex: 'key' },
-                      { title: '设定值', key: 'value', dataIndex: 'value' },
-                    ]}
-                    rowKey="key"
-                    dataSource={settingFilter}
-                    size="small"
-                    scroll={{ y: 460 }}
-                  />
-                </TabPane>
-              </Tabs>
-            </Card>
-          </Col>
-        </Row>
+      <div>
+        <div>
+          <div span={18} className={styles.detailChart}>
+            <LineChart
+              ref={e => {
+                this.lineChart = e;
+              }}
+              height={508}
+              data={data}
+              yAxis={yAxisSetting}
+              filterData={this.filterData}
+              onShowYAxis={this.showAxisModal}
+              onShowXAxis={this.showTimeAxisModal}
+            />
+          </div>
+          <div className={styles.detailSelect}>
+            {this.renderSelect()}
+            {/* <Card bodyStyle={{ padding: 0 }}> */}
+            {/* <StatisticsList
+              link={link}
+              data={statisticsList}
+              diff={timeDiff}
+              onSelectChange={this.onSelectChange}
+            /> */}
+            {/* </Card> */}
+          </div>
+          <div className={styles.detailData}>
+            {this.renderLineInfo()}
+          </div>
+          <div className={styles.detailInfo}>
+            设备信息
+          </div>
+        </div>
         <AxisModal visible={axisModalVisible} editId={id} onCancel={this.onCancelAxisModal} />
         <TimeAxisModal visible={timeAxisModalVisible} onCancel={this.onCancelTimeAxisModal} />
         <AlarmSettingModal
           visible={alarmSettingVisible}
           onCancel={this.onCancelAlarmSettingModal}
         />
-      </Card>
+      </div>
     );
   }
 }
