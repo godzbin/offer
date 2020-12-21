@@ -83,9 +83,14 @@ class Curve extends PureComponent {
           <div className={styles.detailData}>
             {this.renderLineInfo(list)}
           </div>
-          <div className={styles.detailInfo}></div>
+          <div className={styles.detailInfo}>
+            <div className={styles.infoSelect}>
+              <div className={styles.active}>设备信息</div>
+              <div>项目信息</div>
+            </div>
+          </div>
         </div>
-      </div >
+      </div>
     )
   }
 }
