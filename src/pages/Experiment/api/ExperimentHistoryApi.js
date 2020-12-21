@@ -1,18 +1,18 @@
 import request from '@/utils/request';
 
-export async function getKeyName({ id }) {
+export async function getKeyName ({ id }) {
   const {
     data: { data = '' },
   } = await request(`/admin/experiment/${id}/dict`);
   const json = JSON.parse(data);
   return json;
 }
-export async function getHistoryData({ id, startTime = '' }) {
+export async function getHistoryData ({ id, startTime = '' }) {
   const { data } = await request(`/admin/experiment/${id}/data?startTime=${startTime}`);
   return data;
 }
 
-export async function getSetting(id) {
+export async function getSetting (id) {
   const {
     createTime,
     data: { data = '' },
@@ -21,13 +21,13 @@ export async function getSetting(id) {
   return { createTime, data: json };
 }
 
-export async function getYSetting(id) {
+export async function getYSetting (id) {
   const { data = '[]' } = await request(`/admin/experiment/${id}/config`);
   const json = JSON.parse(data || '[]');
   return json;
 }
 
-export async function setYSetting({ id, data }) {
+export async function setYSetting ({ id, data }) {
   return request(`/admin/experiment/${id}/config`, {
     method: 'PUT',
     body: data.map(item => ({

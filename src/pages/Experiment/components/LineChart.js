@@ -316,15 +316,6 @@ class LineChart extends Component {
     // const { height } = this.props;
     return (
       <div style={{ height: `100%`, width: '100%' }}>
-        {/* <Chart
-          ref={e => { 
-          console.log(e)
-          this.echartsInstance = e;
-          }}
-          style={{ height: `${height}px`, width: '100%' }}
-          option={this.getOption()}
-        /> */}
-        {/* {JSON.stringify(currDatazoom)} */}
         <ReactEcharts
           ref={e => {
             this.echartsInstance = e;

@@ -129,8 +129,8 @@ export default {
       });
     },
     // 获取配置信息
-    *getSetting ({ payload }, { call, put }) {
-      const { data, createTime } = yield call(getSetting, payload);
+    *getSetting (_, { call, put }) {
+      const { data, createTime } = yield call(getSetting);
       yield put({
         type: 'setSetting',
         payload: data,
@@ -176,14 +176,16 @@ export default {
      * @param {*}  payload {}
      */
     setYSetting (state, { payload }) {
-      const yAxisSettingNew = setYAxisSettingData({
-        data: state.data,
-        yAxisSetting: JSON.parse(JSON.stringify(payload)),
-      });
-      return {
-        ...state,
-        yAxisSetting: yAxisSettingNew,
-      };
+      console.log(payload)
+      // const yAxisSettingNew = setYAxisSettingData({
+      //   data: state.data,
+      //   yAxisSetting: JSON.parse(JSON.stringify(payload)),
+      // });
+      // console.log(yAxisSettingNew)
+      // return {
+      //   ...state,
+      //   yAxisSetting: yAxisSettingNew,
+      // };
     },
     setHistoryData (state, { payload }) {
       const {

@@ -1,12 +1,12 @@
-import memoizeOne from 'memoize-one';
-import isEqual from 'lodash/isEqual';
-import { formatMessage } from 'umi/locale';
 import Authorized from '@/utils/Authorized';
+import { formatMessage } from 'umi/locale';
+import isEqual from 'lodash/isEqual';
+import memoizeOne from 'memoize-one';
 
 const { check } = Authorized;
 
 // Conversion router to menu.
-function formatter(data, parentAuthority, parentName) {
+function formatter (data, parentAuthority, parentName) {
   return data
     .map(item => {
       if (!item.name || !item.path) {
@@ -61,7 +61,7 @@ const filterMenuData = menuData => {
     return [];
   }
   return menuData
-    .filter(item => item.name && !item.hideInMenu)
+    // .filter(item => item.name && !item.hideInMenu)
     .map(item => check(item.authority, getSubMenu(item)))
     .filter(item => item);
 };
@@ -96,9 +96,9 @@ export default {
   },
 
   effects: {
-    *getMenuData({ payload }, { put }) {
+    *getMenuData ({ payload }, { put }) {
       const { routes, authority } = payload;
-      const menuData = filterMenuData(memoizeOneFormatter(routes, authority));
+      const menuData = memoizeOneFormatter(routes, authority);
       const breadcrumbNameMap = memoizeOneGetBreadcrumbNameMap(menuData);
       yield put({
         type: 'save',
@@ -108,7 +108,7 @@ export default {
   },
 
   reducers: {
-    save(state, action) {
+    save (state, action) {
       return {
         ...state,
         ...action.payload,

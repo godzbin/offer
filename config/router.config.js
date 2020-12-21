@@ -33,7 +33,7 @@ export default [
             path: '/trend/info',
             name: 'info',
             icon: 'info',
-            component: './Experiment/ExperimentDetail',
+            component: './Experiment/ExperimentCurve',
           },
           {
             path: '/trend/analysis',
