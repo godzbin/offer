@@ -67,7 +67,6 @@
   overflow: scroll;
   display: flex;
   flex-wrap: wrap;
-
   align-items: flex-start;
 
   .detailDataChild {
@@ -79,6 +78,7 @@
     border: 1px solid #e0e0e0;
     background-color: #fff;
     padding: 2px;
+    line-height: 1.35;
   }
 
   .detailDataChildTitle {
@@ -121,20 +121,36 @@
   border-left: 2px solid #e1e1e1;
 
   .infoSelect {
-    div {
+    overflow: auto;
+
+    >div {
       float: left;
       padding: 2px 20px;
       border: 1px solid #e0e0e0;
       background-image: linear-gradient(#fbfbfb,
           #e1e1e1);
+      cursor: pointer;
     }
 
     .active {
       background-image: linear-gradient(0deg,
-          #67b3d8 0%,
+          #67b3d8 100%,
           #5aa4ec 50%,
-          #4e95c6 100%);
+          #4e95c6 0%);
       color: #fff;
+    }
+  }
+
+  .detailInfoContent {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    padding: 10px 0;
+
+    >div {
+      width: 50%;
+      padding: 5px 0;
+      color: #999;
     }
   }
 }
@@ -145,8 +161,8 @@
   margin-top: 1px;
   border-bottom: 1px solid #e1e1e1;
   background-color: #fafafa;
-  // background-image: linear-gradient(#fbfbfb,
-  //     #e1e1e1);
+  background-image: linear-gradient(#fbfbfb,
+      #e0e0e0);
 }
 
 

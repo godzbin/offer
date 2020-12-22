@@ -14,7 +14,8 @@ export async function getData () {
   return data;
 };
 
-export async function getInfo () {
+// 获取设备信息
+export async function getEquipmentInfo () {
   const {
     data = []
   } = await request(`/curve/message`);
