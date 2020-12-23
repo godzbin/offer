@@ -12,7 +12,7 @@ class LineChart2 extends Component {
     };
     this.echartsInstance = '';
     this.yWidth = 65;
-    this.dataZoomWidth = 15;
+    this.dataZoomWidth = 10;
   }
 
   getChart () {
