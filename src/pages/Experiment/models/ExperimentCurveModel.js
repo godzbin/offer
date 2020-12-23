@@ -9,7 +9,7 @@ export default {
 			{
 				name: '温度',
 				color: '#f00',
-				min: 10,
+				min: 0,
 				max: 100,
 				keys: [
 					'ut-1',
@@ -20,7 +20,7 @@ export default {
 			{
 				name: '温度2',
 				color: '#000',
-				min: 10,
+				min: 0,
 				max: 100,
 				keys: [
 					'ut-1',

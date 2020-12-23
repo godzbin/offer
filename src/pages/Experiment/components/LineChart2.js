@@ -44,10 +44,7 @@ class LineChart2 extends Component {
     }))
     options.grid = [{
       ...options.grid[0],
-      left: yConfigs.length * this.yWidth,
-      top: 30,
-      right: 0,
-      bottom: 60,
+      left: yConfigs.length * this.yWidth
     }]
     const { dataZoom = [] } = options
     options.dataZoom = yConfigs.reduce((result, item, index) => {
@@ -68,7 +65,7 @@ class LineChart2 extends Component {
           fillerColor: hexToRgba(item.color, 0.2),
           show: true,
           filterMode: 'none',
-          height: '86%',
+          height: '88%',
           showDataShadow: false,
         })
       }
