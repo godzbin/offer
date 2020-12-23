@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
 import ReactEcharts from 'echarts-for-react'
-import echartConfig from './echartConfig'
+import defaultOptions from './echartConfig'
+import { hexToRgba } from '@/utils/utils';
 
 class LineChart2 extends Component {
   constructor(props) {
@@ -14,8 +15,66 @@ class LineChart2 extends Component {
     this.dataZoomWidth = 15;
   }
 
+  getChart () {
+    return this.echartsInstance ? this.echartsInstance.getEchartsInstance() : false;
+  }
+
   getOption = () => {
-    return echartConfig
+    const chart = this.getChart()
+    const options = chart ? chart.getOption() : defaultOptions;
+    const { yConfigs } = this.props;
+    options.yAxis = yConfigs.map((item, index) => ({
+      name: item.name,
+      min: item.min,
+      max: item.max,
+      axisLine: {
+        lineStyle: {
+          color: item.color,
+        },
+      },
+      splitLine: {
+        show: !index,
+        lineStyle: {
+          type: 'dashed',
+          color: '#44484d'
+        }
+      },
+      offset: index * this.yWidth + this.dataZoomWidth,
+      position: 'left'
+    }))
+    options.grid = [{
+      ...options.grid[0],
+      left: yConfigs.length * this.yWidth,
+      top: 30,
+      right: 0,
+      bottom: 60,
+    }]
+    const { dataZoom = [] } = options
+    options.dataZoom = yConfigs.reduce((result, item, index) => {
+      const itemZoom = result.find((zoom) => item.name === zoom.id)
+      if (itemZoom) {
+        itemZoom.backgroundColor = item.color
+      } else {
+        result.push({
+          id: item.name,
+          yAxisIndex: index,
+          type: 'inside',
+          filterMode: 'none',
+        }, {
+          width: this.dataZoomWidth,
+          id: `yAxis${item.name}`,
+          yAxisIndex: index,
+          left: this.yWidth * (yConfigs.length - index) - this.dataZoomWidth,
+          fillerColor: hexToRgba(item.color, 0.2),
+          show: true,
+          filterMode: 'none',
+          height: '86%',
+          showDataShadow: false,
+        })
+      }
+      return result
+    }, dataZoom)
+    return options
   }
 
   render () {

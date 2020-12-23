@@ -1,6 +1,6 @@
 import request from '@/utils/request';
 
-export async function getList () {
+export async function getKeyList () {
   const {
     data = []
   } = await request(`/curve/dict`);
@@ -10,7 +10,7 @@ export async function getList () {
 export async function getData () {
   const {
     data = []
-  } = await request(`/curve`);
+  } = await request(`/curve/`);
   return data;
 };
 

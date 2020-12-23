@@ -11,17 +11,24 @@ export default {
 	xAxis: [
 		{
 			type: 'time',
+			splitLine: {
+				show: true,
+				lineStyle: {
+					type: 'dashed',
+					color: '#44484d'
+				}
+			},
 		},
 	],
 	// backgroundColor: '#000',
-	grid: {
+	grid: [{
 		show: true,
 		left: 100,
 		right: 0,
 		bottom: 60,
 		top: 0,
 		backgroundColor: '#3a3f44'
-	},
+	}],
 	yAxis: [
 		{
 			name: '',
