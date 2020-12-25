@@ -11,10 +11,9 @@ export default {
 				color: '#f00',
 				min: 0,
 				max: 100,
-				keys: [
+				bindKey: [
 					'ut-1',
-					'ut-2',
-					'ut-3',
+					'ut-2'
 				]
 			},
 			{
@@ -22,10 +21,8 @@ export default {
 				color: '#000',
 				min: 0,
 				max: 100,
-				keys: [
-					'ut-1',
-					'ut-2',
-					'ut-3',
+				bindKey: [
+					'ut-3'
 				]
 			}
 		],
