@@ -1,4 +1,4 @@
-import { getData, getEquipmentInfo, getKeyList } from '../api/Curve'
+import { getData, getEquipmentInfo, getKeyList, getYSettings } from '../api/Curve'
 
 export default {
 	namespace: 'ExperimentCurve',
@@ -7,6 +7,7 @@ export default {
 		equipmentInfo: [],
 		yConfigs: [
 			{
+				key: 1,
 				name: '温度',
 				color: '#f00',
 				min: 0,
@@ -17,6 +18,7 @@ export default {
 				]
 			},
 			{
+				key: 2,
 				name: '温度2',
 				color: '#000',
 				min: 0,
@@ -49,6 +51,15 @@ export default {
 				type: 'setEquipmentInfo',
 				payload: data
 			})
+		},
+		*getYSettings (_, { call, put }) {
+			const data = yield call(getYSettings);
+			yield put({ type: 'setYSettings', payload: data })
+		},
+		*changeYConfig ({ payload }, { put }) {
+			// const data = yield call(updateYSetting);
+			console.log(payload)
+			yield put({ type: 'setYSetting', payload })
 		}
 	},
 	reducers: {
@@ -79,6 +90,24 @@ export default {
 				}
 			})
 			return { ...state, dataList }
+		},
+		setYSettings (state, { payload }) {
+			const yConfigs = Object.keys(payload).map((item) => {
+				const data = JSON.parse(payload[item])
+				data[0].name = item
+				return data[0]
+			})
+			return { ...state, yConfigs }
+		},
+		setYSetting (state, { payload }) {
+			const { yConfigs } = state
+			console.log(payload)
+			const index = yConfigs.findIndex((item) => item.key === payload.key)
+			yConfigs[index] = payload
+			return {
+				...state,
+				yConfigs
+			}
 		}
 	}
 }

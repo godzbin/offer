@@ -22,3 +22,8 @@ export async function getEquipmentInfo () {
   return data;
 };
 
+export async function getYSettings () {
+  const { data = [] } = await request(`/curve/{key}/yaxle`)
+  return data
+}
+

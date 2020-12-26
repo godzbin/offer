@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 
+import AxisModal from './components/AxisModal2'
 import { Checkbox } from 'antd';
 import LineChart from './components/LineChart2';
 import { connect } from 'dva';
@@ -15,7 +16,10 @@ class Curve extends PureComponent {
     this.state = {
       infoType: 0,
       chartInfoList: [],
-      checkedList: []
+      checkedList: [],
+      axisModalVisible: false,
+      dataZoomSelect: false, // 刷选状态
+      isShowTooltip: true
     };
     this.lineChart = ''
     this.intervalIndex = ''
@@ -32,6 +36,9 @@ class Curve extends PureComponent {
     dispatch({
       type: 'ExperimentCurve/getEquipmentInfo'
     })
+    // dispatch({
+    //   type: 'ExperimentCurve/getYSettings'
+    // })
     this.setChartData()
     this.setChartDataInterval()
   }
@@ -55,44 +62,12 @@ class Curve extends PureComponent {
   // 获取实时数据
   setChartData = async () => {
     const {
-      dispatch,
-      ExperimentCurve: { dataList, yConfigs }
+      dispatch
     } = this.props
     await dispatch({
       type: 'ExperimentCurve/getData'
     })
-    const chart = this.lineChart.getChart()
-    if (chart) {
-      const option = chart.getOption()
-      option.series = yConfigs.reduce((result, item, index) => {
-        item.bindKey.forEach((bItem) => {
-          const data = dataList.find((dItem) => dItem.key === bItem)
-          result.push({
-            id: `${index}-${data.key}`,
-            yAxisIndex: index,
-            type: 'line',
-            name: data.key,
-            smooth: true,
-            data: data.value.map((cItem) => ({
-              name: cItem.time,
-              value: [cItem.time, cItem.value]
-            }))
-          })
-        })
-        return result;
-      }, [])
-      // option.series = dataList.map((item) => ({
-      //   type: 'line',
-      //   name: item.key,
-      //   smooth: true,
-      //   data: item.value.map((cItem) => ({
-      //     name: cItem.time,
-      //     value: [cItem.time, cItem.value]
-      //   }))
-      // }))
-      chart.setOption(option)
-      this.setChartInfoList()
-    }
+    this.renderChart()
   }
 
   // 设置实时数据图表数据
@@ -119,6 +94,37 @@ class Curve extends PureComponent {
       })
     }
   }
+
+  renderChart = (isRestore = false) => {
+    const {
+      ExperimentCurve: { dataList, yConfigs }
+    } = this.props
+    const chart = this.lineChart.getChart()
+    if (chart) {
+      const option = chart.getOption()
+      option.series = yConfigs.reduce((result, item, index) => {
+        console.log(item.bindKey)
+        item.bindKey.forEach((bItem) => {
+          const data = dataList.find((dItem) => dItem.key === bItem)
+          result.push({
+            id: `${index}-${data.key}`,
+            yAxisIndex: index,
+            type: 'line',
+            name: data.key,
+            smooth: true,
+            data: data.value.map((cItem) => ({
+              name: cItem.time,
+              value: [cItem.time, cItem.value]
+            }))
+          })
+        })
+        return result;
+      }, [])
+      chart.setOption(option, isRestore)
+      this.setChartInfoList()
+    }
+  }
+
 
   // 
   selectAllKey = () => {
@@ -253,7 +259,6 @@ class Curve extends PureComponent {
 
   // 当图表改变时
   onChartChange = () => {
-
   }
 
   // 渲染信息切换框中数据
@@ -280,11 +285,62 @@ class Curve extends PureComponent {
     )
   }
 
+  toggleDataZoomSelect = () => {
+    const { dataZoomSelect } = this.state
+    const chart = this.lineChart.getChart()
+    // 开启框选缩放事件
+    this.setState({
+      dataZoomSelect: !dataZoomSelect
+    })
+    chart.dispatchAction({
+      type: 'takeGlobalCursor',
+      key: 'dataZoomSelect',
+      // 启动或关闭
+      dataZoomSelectActive: !dataZoomSelect,
+    });
+  }
+
+  onCancelAxisModal = () => {
+    this.setState({
+      axisModalVisible: false
+    })
+  }
+
+  showAxisModal = () => {
+    this.setState({
+      axisModalVisible: true
+    })
+  }
+
+  toggleTooltip = () => {
+    const { isShowTooltip } = this.state
+    this.setState({
+      isShowTooltip: !isShowTooltip
+    })
+  }
+
+  restore = () => {
+    const chart = this.lineChart.getChart()
+    chart.dispatchAction({
+      type: 'restore'
+    })
+  }
+
+  onConfigChange = async (yConfig) => {
+    const { dispatch } = this.props
+    await dispatch({
+      type: 'ExperimentCurve/changeYConfig',
+      payload: yConfig
+    })
+    console.log(1)
+    this.renderChart(true)
+  }
+
   render () {
     const {
       ExperimentCurve: { keyList = [], equipmentInfo = [], yConfigs = [] }
     } = this.props
-    const { chartInfoList } = this.state
+    const { chartInfoList, axisModalVisible, dataZoomSelect, isShowTooltip } = this.state
     return (
       <div>
         <div className={styles.title}>
@@ -292,7 +348,13 @@ class Curve extends PureComponent {
         </div>
         <div className={styles.content}>
           <div className={styles.detailChart}>
-            <LineChart ref={e => { this.lineChart = e }} onchange={() => this.onChartChange()} yConfigs={yConfigs} />
+            <div className={styles.tools}>
+              <div className={dataZoomSelect ? styles.toolsActive : ''} onClick={() => this.toggleDataZoomSelect()}>放大</div>
+              <div onClick={() => this.restore()}>恢复</div>
+              <div onClick={() => this.showAxisModal()}>配置</div>
+              <div className={isShowTooltip ? styles.toolsActive : ''} onClick={() => this.toggleTooltip()}>提示</div>
+            </div>
+            <LineChart ref={e => { this.lineChart = e }} onchange={() => this.onChartChange()} yConfigs={yConfigs} isShowTooltip={isShowTooltip} />
           </div>
           <div className={styles.detailSelect}>
             {this.renderSelect(keyList)}
@@ -306,6 +368,13 @@ class Curve extends PureComponent {
             {this.renderInfoPlane(equipmentInfo)}
           </div>
         </div>
+        <AxisModal
+          visible={axisModalVisible}
+          onCancel={this.onCancelAxisModal}
+          yConfigs={yConfigs}
+          keyList={keyList}
+          onChange={(params) => this.onConfigChange(params)}
+        />
       </div>
     )
   }

@@ -22,7 +22,11 @@ class LineChart2 extends Component {
   getOption = () => {
     const chart = this.getChart()
     const options = chart ? chart.getOption() : defaultOptions;
-    const { yConfigs } = this.props;
+    const { yConfigs, isShowTooltip } = this.props;
+    options.tooltip = {
+      trigger: 'axis',
+      showContent: isShowTooltip,
+    };
     options.yAxis = yConfigs.map((item, index) => ({
       name: item.name,
       min: item.min,
@@ -31,6 +35,12 @@ class LineChart2 extends Component {
         lineStyle: {
           color: item.color,
         },
+      },
+      axisLabel: {
+        color: item.color,
+      },
+      nameTextStyle: {
+        color: item.color
       },
       splitLine: {
         show: !index,
@@ -82,6 +92,7 @@ class LineChart2 extends Component {
           ref={e => {
             this.echartsInstance = e;
           }}
+          theme="dark"
           style={{ height: `100%`, width: '100%' }}
           option={this.getOption()}
         />

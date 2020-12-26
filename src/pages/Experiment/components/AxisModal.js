@@ -1,12 +1,13 @@
+import { Button, Card, Checkbox, Col, Modal, Row, Table, Transfer } from 'antd';
 import React, { Component } from 'react';
-import { Modal, Card, Row, Col, Table, Button, Checkbox, Transfer } from 'antd';
+
+import EditAxisModal from './EditAxisModal';
 import { connect } from 'dva';
 import styles from '../ModalStyle';
-import EditAxisModal from './EditAxisModal';
 
-@connect(({ experimentHistory, loading }) => ({
-  experimentHistory,
-  loading: loading.models.experimentHistory,
+@connect(({ ExperimentCurve, loading }) => ({
+  ExperimentCurve,
+  loading: loading.models.experimentCurve,
 }))
 class AxisModal extends Component {
   constructor(props) {
@@ -20,18 +21,14 @@ class AxisModal extends Component {
           dataIndex: 'showName',
           align: 'center',
           width: 90,
-          render: (val, record) => {
-            return <Checkbox defaultChecked={val} onChange={() => this.onShowNameChange(record)} />;
-          },
+          render: (val, record) => (<Checkbox defaultChecked={val} onChange={() => this.onShowNameChange(record)} />),
         },
         {
           title: '坐标可见',
           dataIndex: 'showAxis',
           align: 'center',
           width: 90,
-          render: (val, record) => {
-            return <Checkbox defaultChecked={val} onChange={() => this.onShowAxisChange(record)} />;
-          },
+          render: (val, record) => (<Checkbox defaultChecked={val} onChange={() => this.onShowAxisChange(record)} />),
         },
         {
           title: '坐标名称',
@@ -44,25 +41,23 @@ class AxisModal extends Component {
           key: 'action',
           align: 'center',
           width: 280,
-          render: (val, record) => {
-            return (
-              <div>
-                <Button type="link" onClick={e => this.editAxis(record.id, e)}>
-                  修改
-                </Button>
-                <Button type="link" onClick={e => this.editDataBind(record, e)}>
-                  修改坐标数值
-                </Button>
-                <Button
-                  type="link"
-                  style={{ color: '#f00' }}
-                  onClick={e => this.removeAxis(record.id, e)}
-                >
-                  删除
-                </Button>
-              </div>
-            );
-          },
+          render: (val, record) => (
+            <div>
+              <Button type="link" onClick={e => this.editAxis(record.id, e)}>
+                修改
+              </Button>
+              <Button type="link" onClick={e => this.editDataBind(record, e)}>
+                修改坐标数值
+              </Button>
+              <Button
+                type="link"
+                style={{ color: '#f00' }}
+                onClick={e => this.removeAxis(record.id, e)}
+              >
+                删除
+              </Button>
+            </div>
+          ),
         },
       ],
       editAxisModalVisible: false,
@@ -71,11 +66,12 @@ class AxisModal extends Component {
   }
 
   onCancel = () => {
-    const { onCancel, dispatch, editId } = this.props;
-    dispatch({
-      type: 'experimentHistory/getYSetting',
-      payload: editId,
-    });
+    // const { onCancel, dispatch, editId } = this.props;
+    const { onCancel } = this.props;
+    // dispatch({
+    //   type: 'experimentHistory/getYSetting',
+    //   payload: editId,
+    // });
     if (onCancel) onCancel();
   };
 
@@ -187,13 +183,11 @@ class AxisModal extends Component {
     this.onUpdateSetting();
   };
 
-  renderAddAxisButton = () => {
-    return (
-      <Button type="primary" onClick={this.addAxis}>
-        增加坐标轴
-      </Button>
-    );
-  };
+  renderAddAxisButton = () => (
+    <Button type="primary" onClick={this.addAxis}>
+      增加坐标轴
+    </Button>
+  )
 
   renderTypeList = () => {
     const { selectId } = this.state;
@@ -246,13 +240,13 @@ class AxisModal extends Component {
     this.onUpdateSetting();
   };
 
-  render() {
+  render () {
     const { visible } = this.props;
     const { columns, editAxisModalVisible, editAxisId, selectId } = this.state;
     const {
-      experimentHistory: { yAxisSetting },
+      ExperimentCurve: { yConfigs },
     } = this.props;
-    const selectLine = yAxisSetting.find(({ id }) => selectId === id) || {};
+    const selectLine = yConfigs.find(({ id }) => selectId === id) || {};
     return (
       <Modal
         title="数据轴设置"
@@ -272,7 +266,7 @@ class AxisModal extends Component {
               <Table
                 rowKey="id"
                 columns={columns}
-                dataSource={yAxisSetting}
+                dataSource={yConfigs}
                 pagination={false}
                 scroll={{ y: 390 }}
               />

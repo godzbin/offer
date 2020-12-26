@@ -4,6 +4,16 @@ export default {
 		trigger: 'axis',
 		showContent: true,
 	},
+	backgroundColor: '#fff',
+	toolbox: {
+		show: true,
+		top: -100,
+		feature: {
+			dataZoom: {
+				show: true,
+			}
+		}
+	},
 	calculable: true,
 	legend: {
 		type: 'scroll',
@@ -27,10 +37,10 @@ export default {
 			},
 			axisLabel: {
 				inside: true,
-				// backgroundColor: '#3a3f44',
 				color: '#fff',
-				// width: '100%',
-				// padding: [10, 100]
+				align: 'center',
+				showMinLabel: false,
+				showMaxLabel: false
 			},
 			boundaryGap: ['1%', '10%']
 		},

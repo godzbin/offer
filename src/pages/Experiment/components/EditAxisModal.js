@@ -1,10 +1,11 @@
+import { Form, Input, InputNumber, Modal, Popover } from 'antd';
 import React, { Component } from 'react';
-import { Modal, Form, Input, Popover, InputNumber } from 'antd';
+
 import { SketchPicker } from 'react-color';
 import { connect } from 'dva';
 
-@connect(({ experimentHistory, loading }) => ({
-  experimentHistory,
+@connect(({ ExperimentCurve, loading }) => ({
+  ExperimentCurve,
   loading: loading.models.experimentHistory,
 }))
 class EditAxisModal extends Component {
@@ -25,7 +26,7 @@ class EditAxisModal extends Component {
       dispatch,
       editId,
       onOk,
-      experimentHistory: { editAxis },
+      ExperimentCurve: { editAxis },
     } = this.props;
     if (editAxis.name) {
       await dispatch({
@@ -63,7 +64,7 @@ class EditAxisModal extends Component {
     });
   };
 
-  render() {
+  render () {
     const layout = {
       labelCol: { span: 6 },
       wrapperCol: { span: 16 },
