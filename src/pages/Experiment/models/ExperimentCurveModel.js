@@ -8,7 +8,7 @@ export default {
 		yConfigs: [
 			{
 				key: 1,
-				name: '温度',
+				name: '温度123456',
 				color: '#f00',
 				min: 0,
 				max: 100,

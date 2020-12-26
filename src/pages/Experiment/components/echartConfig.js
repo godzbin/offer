@@ -37,7 +37,7 @@ export default {
 			},
 			axisLabel: {
 				inside: true,
-				color: '#fff',
+				color: '#999',
 				align: 'center',
 				showMinLabel: false,
 				showMaxLabel: false
@@ -51,7 +51,7 @@ export default {
 		left: 100,
 		right: 2,
 		bottom: 38,
-		top: 40,
+		top: 0,
 		backgroundColor: '#3a3f44',
 		borderColor: '#3a3f44'
 	}],

@@ -22,17 +22,17 @@
 }
 
 .title {
-  padding: 20px 40px;
+  padding: 10px 20px 10px;
   color: #666;
-  background-color: #fafafa;
-  background-image: linear-gradient(#fbfbfb,
-  #e1e1e1);
+  background-color: #f5f5f5;
+  // background-image: linear-gradient(#fbfbfb,
+  // #e1e1e1);
   font-size: 24px;
-  box-shadow: 1px 1px 4px rgb(150, 150, 150);
+  // box-shadow: 1px 1px 4px rgb(150, 150, 150);
 }
 
 .content {
-  padding: 15px;
+  padding: 0 15px 15px;
   position: relative;
   background-color: #f5f5f5;
   box-shadow: 1px 1px 4px rgb(150, 150, 150);
@@ -62,28 +62,41 @@
       cursor: pointer;
 
       &:hover {
-        background: #0ff;
+        background: #5aa4ec;
+        color: #fff;
       }
 
       &.toolsActive {
-        background: #0ff;
+        background: #5aa4ec;
+        color: #fff;
       }
     }
   }
 }
 
 .detailSelect {
-  padding: 15px;
+  // padding: 15px;
   overflow: auto;
   position: absolute;
   right: 15px;
-  top: 15px;
+  top: 56px;
   flex: 0 0 285px;
   width: 130px;
-  background-color: #fff;
+  background-color: #3a3f44;
   border: 1px solid #e0e0e0;
   height: calc(100vh - 286px);
   overflow: scroll;
+
+  .selectAll {
+    padding: 2px 20px;
+    background-image: linear-gradient(#fbfbfb,
+        #e1e1e1);
+  }
+
+  .selectContent {
+    padding: 10px 20px;
+    color: #fff
+  }
 }
 
 .detailData {

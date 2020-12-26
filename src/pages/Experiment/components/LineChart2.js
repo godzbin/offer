@@ -38,9 +38,12 @@ class LineChart2 extends Component {
       },
       axisLabel: {
         color: item.color,
+        padding: [10, 0, 0, 0]
       },
+      nameLocation: 'start',
       nameTextStyle: {
-        color: item.color
+        color: item.color,
+        align: 'right'
       },
       splitLine: {
         show: !index,
@@ -75,7 +78,7 @@ class LineChart2 extends Component {
           fillerColor: hexToRgba(item.color, 0.2),
           show: true,
           filterMode: 'none',
-          height: '88%',
+          height: '93%',
           showDataShadow: false,
         })
       }

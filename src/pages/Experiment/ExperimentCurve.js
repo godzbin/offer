@@ -103,7 +103,6 @@ class Curve extends PureComponent {
     if (chart) {
       const option = chart.getOption()
       option.series = yConfigs.reduce((result, item, index) => {
-        console.log(item.bindKey)
         item.bindKey.forEach((bItem) => {
           const data = dataList.find((dItem) => dItem.key === bItem)
           result.push({
@@ -196,28 +195,37 @@ class Curve extends PureComponent {
   renderSelect = (list) => {
     const { checkedList = [], chartInfoList } = this.state
     return (
-      <div>
-        <Checkbox checked={checkedList.length === chartInfoList.length} onClick={() => this.checkedAll()}>
-          全选
-        </Checkbox>
-        {/* <CheckboxGroup options={list} /> */}
-        {list.map((item) => (
-          <div key={item.key} style={{ paddingTop: 10 }}>
-            <Checkbox checked={checkedList.includes(item.key)} onClick={() => this.checkedKey(item.key)}>
-              <span
+      <div className={styles.detailSelect}>
+        <div className={styles.selectAll}>
+          <Checkbox checked={checkedList.length === chartInfoList.length} onClick={() => this.checkedAll()}>
+            全选
+          </Checkbox>
+        </div>
+        <div className={styles.selectContent}>
+          {list.map((item) => (
+            <div key={item.key} style={{ paddingBottom: 10 }}>
+              <Checkbox
+                checked={checkedList.includes(item.key)}
+                onClick={() => this.checkedKey(item.key)}
                 style={{
-                  background: this.getColorByKey(item.key) || '#ddd',
-                  display: 'inline-block',
-                  width: 15,
-                  height: 10,
-                  marginTop: 5,
-                  marginRight: 5
+                  color: checkedList.includes(item.key) ? '#fff' : '#999'
                 }}
-              />
-              {item.name}
-            </Checkbox>
-          </div>
-        ))}
+              >
+                <span
+                  style={{
+                    background: this.getColorByKey(item.key) || '#ddd',
+                    display: 'inline-block',
+                    width: 15,
+                    height: 10,
+                    marginTop: 5,
+                    marginRight: 5
+                  }}
+                />
+                {item.name}
+              </Checkbox>
+            </div>
+          ))}
+        </div>
       </div>
     )
   }
@@ -332,7 +340,6 @@ class Curve extends PureComponent {
       type: 'ExperimentCurve/changeYConfig',
       payload: yConfig
     })
-    console.log(1)
     this.renderChart(true)
   }
 
@@ -343,10 +350,10 @@ class Curve extends PureComponent {
     const { chartInfoList, axisModalVisible, dataZoomSelect, isShowTooltip } = this.state
     return (
       <div>
-        <div className={styles.title}>
-          实时趋势
-        </div>
         <div className={styles.content}>
+          <div className={styles.title}>
+            实时趋势
+          </div>
           <div className={styles.detailChart}>
             <div className={styles.tools}>
               <div className={dataZoomSelect ? styles.toolsActive : ''} onClick={() => this.toggleDataZoomSelect()}>放大</div>
@@ -356,9 +363,7 @@ class Curve extends PureComponent {
             </div>
             <LineChart ref={e => { this.lineChart = e }} onchange={() => this.onChartChange()} yConfigs={yConfigs} isShowTooltip={isShowTooltip} />
           </div>
-          <div className={styles.detailSelect}>
-            {this.renderSelect(keyList)}
-          </div>
+          {this.renderSelect(keyList)}
         </div>
         <div className={styles.detailFooter}>
           <div className={styles.detailData}>
