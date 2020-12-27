@@ -22,12 +22,12 @@
 }
 
 .title {
-  padding: 10px 20px 10px;
+  padding: 18px 20px 18px;
   color: #666;
   background-color: #f5f5f5;
   // background-image: linear-gradient(#fbfbfb,
   // #e1e1e1);
-  font-size: 24px;
+  font-size: 32px;
   // box-shadow: 1px 1px 4px rgb(150, 150, 150);
 }
 
@@ -62,9 +62,9 @@
   position: relative;
   border: 1px solid #e0e0e0;
   background-color: #fff;
-  margin-right: 140px;
-  height: calc(100vh - 256px);
-  padding-top: 43px;
+  margin-right: 190px;
+  height: calc(100vh - 336px);
+  padding-top: 48px;
 
   .tools {
     position: absolute;
@@ -117,13 +117,12 @@
   overflow: auto;
   position: absolute;
   right: 15px;
-  top: 56px;
+  top: 84px;
   flex: 0 0 285px;
-  width: 130px;
+  width: 190px;
   background-color: #3a3f44;
   border: 1px solid #e0e0e0;
-  height: calc(100vh - 256px);
-  overflow: scroll;
+  height: calc(100vh - 336px);
 
   .selectAll {
     padding: 11px 20px;
@@ -132,8 +131,10 @@
   }
 
   .selectContent {
+    overflow-y: scroll;
     padding: 10px 20px;
-    color: #fff
+    color: #fff;
+    height: calc(100% - 43px);
   }
 }
 
@@ -141,9 +142,9 @@
   position: relative;
   box-sizing: border-box;
   padding: 20px 40px 20px 20px;
-  margin-right: 300px;
+  margin-right: 500px;
   height: 100%;
-  overflow: scroll;
+  overflow-y: scroll;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
@@ -174,21 +175,24 @@
 
   .detailDataChildTitle {
     margin-bottom: 5px;
-    font-size: 18px;
     color: #999;
+    font-size: 19px;
   }
 
   .detailDataChildContent {
     padding: 5px;
     position: relative;
     background-color: #fff;
-    border: 1px solid #cbcbcb;
+    // border: 1px solid #cbcbcb;
     color: #666666;
+    box-shadow: inset 0px 0px 4px 1px rgba(32, 21, 18, 0.3);
+    border: solid 1px #ffffff;
   }
 
   .detailDataChildContentValue {
     font-size: 24px;
     margin: 0;
+    font-weight: 600;
     // padding-left: 10px;
   }
 
@@ -205,9 +209,9 @@
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 300px;
+  width: 500px;
   height: 100%;
-  overflow: scroll;
+  overflow-y: scroll;
   padding: 20px;
   // border-left: 2px solid #e1e1e1;
 
@@ -239,7 +243,8 @@
 
     >div {
       display: inline-block;
-      padding: 2px 20px;
+      padding: 2px 30px;
+      font-size: 19px;
       border: 1px solid #e0e0e0;
       background-image: linear-gradient(0deg,
           #e2e2e2 0%,
@@ -273,14 +278,15 @@
     >div {
       width: 50%;
       padding: 5px 0;
-      color: #999;
+      font-size: 19px;
+      color: #8a8a8a;
     }
   }
 }
 
 .detailFooter {
   position: relative;
-  height: 180px;
+  height: 230px;
   margin-top: 1px;
   border-bottom: 1px solid rgba(0, 0, 0, .2);
   background-color: #fafafa;

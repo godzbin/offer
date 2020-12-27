@@ -2,7 +2,7 @@ import fetch from 'dva/fetch';
 
 export const dva = {
   config: {
-    onError(err) {
+    onError (err) {
       err.preventDefault();
     },
   },
@@ -10,7 +10,7 @@ export const dva = {
 
 let authRoutes = null;
 
-function ergodicRoutes(routes, authKey, authority) {
+function ergodicRoutes (routes, authKey, authority) {
   routes.forEach(element => {
     if (element.path === authKey) {
       Object.assign(element.authority, authority || []);
@@ -21,18 +21,20 @@ function ergodicRoutes(routes, authKey, authority) {
   });
 }
 
-export function patchRoutes(routes) {
+export function patchRoutes (routes) {
   Object.keys(authRoutes).map(authKey =>
     ergodicRoutes(routes, authKey, authRoutes[authKey].authority)
   );
   window.g_routes = routes;
 }
 
-export function render(oldRender) {
-  fetch('/api/auth_routes')
-    .then(res => res.json())
-    .then(ret => {
-      authRoutes = ret;
-      oldRender();
-    });
+export function render (oldRender) {
+  // fetch('/api/auth_routes')
+  //   .then(res => res.json())
+  //   .then(ret => {
+  //     console.log(ret)
+  const ret = { "/form/advanced-form": { "authority": ["admin", "user"] } }
+  authRoutes = ret;
+  oldRender();
+  // });
 }

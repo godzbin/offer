@@ -57,14 +57,9 @@ export default class BaseMenu extends PureComponent {
   }
 
   getNavMenuByParentItem = (menuItem, openKeys) => {
-    const style = { backgroundColor: '#3a3f44', padding: '40px 5px', textAlign: 'center', borderBottom: '1px solid #555', cursor: 'pointer' }
-    let className = ''
     const isActive = openKeys.some(key => key === menuItem.path)
-    if (isActive) {
-      className = styles.menuParentActive
-    }
     return (
-      <div style={style} key={menuItem.name} className={className} onClick={() => this.handleSelectMenu(menuItem.path)}>
+      <div key={menuItem.name} className={[styles.menuParent, isActive ? styles.menuParentActive : ''].join(' ')} onClick={() => this.handleSelectMenu(menuItem.path)}>
         {getIcon(menuItem.icon, 'icon', isActive)}
         <p>{menuItem.name}</p>
       </div>
@@ -96,14 +91,14 @@ export default class BaseMenu extends PureComponent {
       selectedKeys[0] = selectParentMenu
     }
     const leftStyle = { color: '#a4bcd6', float: 'left', width: '85px' }
-    const rightStyle = { float: 'right', width: '200px', height: 'calc(100vh - 90px)', borderLeft: '2px solid #bbb' }
+    const rightStyle = { float: 'right', width: '200px', height: 'calc(100vh - 86px)', borderLeft: '2px solid #bbb' }
     return (
       // 左边主菜单
       <div>
         <div style={leftStyle}>
           {this.getNavMenuByParent(menuData, selectedKeys)}
         </div>
-        <div style={rightStyle} className={styles.menuChildrenItem}>
+        <div style={rightStyle} className={styles.menuChildren}>
           {this.getNavMenuByChildren(menuData, selectedKeys)}
         </div>
       </div>

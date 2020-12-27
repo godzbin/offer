@@ -157,31 +157,29 @@ class BasicLayout extends React.PureComponent {
   render () {
     const {
       navTheme,
-      layout: PropsLayout,
+      // layout: PropsLayout,
       children,
       location: { pathname },
-      isMobile,
+      // isMobile,
       menuData,
       breadcrumbNameMap,
       route: { routes },
       fixedHeader,
     } = this.props;
 
-    const isTop = PropsLayout === 'topmenu';
+    // const isTop = PropsLayout === 'topmenu';
     const routerConfig = this.getRouterAuthority(pathname, routes);
     const contentStyle = !fixedHeader ? { paddingTop: 0 } : {};
     const layout = (
       <Layout>
-        {isTop && !isMobile ? null : (
-          <SiderMenu
-            logo={logo}
-            theme={navTheme}
-            onCollapse={this.handleMenuCollapse}
-            menuData={menuData}
-            isMobile={isMobile}
-            {...this.props}
-          />
-        )}
+        <SiderMenu
+          logo={logo}
+          theme={navTheme}
+          // onCollapse={this.handleMenuCollapse}
+          menuData={menuData}
+          // isMobile={isMobile}
+          {...this.props}
+        />
         <Layout
           style={{
             ...this.getLayoutStyle(),

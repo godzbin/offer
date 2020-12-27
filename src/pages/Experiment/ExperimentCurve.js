@@ -24,6 +24,7 @@ class Curve extends PureComponent {
     };
     this.lineChart = ''
     this.intervalIndex = ''
+    this.intervalTime = 5000
   }
 
   async componentDidMount () {
@@ -57,7 +58,7 @@ class Curve extends PureComponent {
       } catch (e) {
         console.log(e.message)
       }
-    }, 50000)
+    }, this.intervalTime)
   }
 
   // 获取实时数据
@@ -224,6 +225,7 @@ class Curve extends PureComponent {
                 checked={checkedList.includes(item.key)}
                 onClick={() => this.checkedKey(item.key)}
                 style={{
+                  fontSize: 18,
                   color: checkedList.includes(item.key) ? '#fff' : '#999'
                 }}
               >
@@ -231,7 +233,7 @@ class Curve extends PureComponent {
                   style={{
                     background: this.getColorByKey(item.key) || '#ddd',
                     display: 'inline-block',
-                    width: 15,
+                    width: 10,
                     height: 10,
                     marginTop: 5,
                     marginRight: 5
@@ -264,8 +266,8 @@ class Curve extends PureComponent {
           style={{
             border: `4px solid ${this.getColorByKey(item.key)}`,
             display: 'inline-block',
-            width: 12,
-            height: 12,
+            width: 15,
+            height: 15,
             borderRadius: '100%',
             marginRight: 5
           }}
@@ -400,7 +402,7 @@ class Curve extends PureComponent {
           <div
             className={styles.detailChart}
             style={
-              { marginRight: isShowSelect ? 135 : 20 }
+              { marginRight: isShowSelect ? 195 : 20 }
             }
           >
             <div className={styles.tools}>
@@ -423,7 +425,7 @@ class Curve extends PureComponent {
             className={styles.showSelect}
             style={
               {
-                right: isShowSelect ? 130 : 20,
+                right: isShowSelect ? 190 : 20,
                 paddingLeft: isShowSelect ? 3 : 0,
                 paddingRight: isShowSelect ? 0 : 3,
               }

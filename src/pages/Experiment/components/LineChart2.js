@@ -43,7 +43,7 @@ class LineChart2 extends Component {
         },
         axisLabel: {
           color: item.color,
-          padding: [10, 0, 0, 0]
+          padding: [15, 0, 0, 0]
         },
         nameLocation: 'middle',
         nameTextStyle: {
@@ -53,13 +53,13 @@ class LineChart2 extends Component {
           padding: [0, 0, 20, 0]
         },
         splitLine: {
-          show: !index,
+          show: !yConfigsFilter.findIndex((f) => f.key === item.key),
           lineStyle: {
             type: 'dashed',
-            color: '#44484d'
+            color: '#999'
           }
         },
-        offset: yConfigsFilter.findIndex((f) => f.key === item.key) * this.yWidth + this.dataZoomWidth,
+        offset: yConfigsFilter.findIndex((f) => f.key === item.key) * this.yWidth + this.dataZoomWidth + 5,
         position: 'left'
       }))
       options.grid = [{
@@ -72,7 +72,7 @@ class LineChart2 extends Component {
         if (itemZoom) {
           itemZoom.fillerColor = hexToRgba(item.color, 0.2);
           itemZoom.show = item.showAxis;
-          itemZoom.left = this.yWidth * (yConfigsFilter.length - yConfigsFilter.findIndex((f) => f.key === item.key)) - this.dataZoomWidth;
+          itemZoom.left = this.yWidth * (yConfigsFilter.length - yConfigsFilter.findIndex((f) => f.key === item.key)) - this.dataZoomWidth - 5;
           itemZoom.yAxisIndex = index;
         } else {
           result.push({
@@ -85,7 +85,7 @@ class LineChart2 extends Component {
             width: this.dataZoomWidth,
             id: `yAxis-${item.name}`,
             yAxisIndex: index,
-            left: this.yWidth * (yConfigsFilter.length - yConfigsFilter.findIndex((f) => f.key === item.key)) - this.dataZoomWidth,
+            left: this.yWidth * (yConfigsFilter.length - yConfigsFilter.findIndex((f) => f.key === item.key)) - this.dataZoomWidth - 5,
             fillerColor: hexToRgba(item.color, 0.2),
             // show: true,
             filterMode: 'none',

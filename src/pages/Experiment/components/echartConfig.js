@@ -23,11 +23,12 @@ export default {
 	xAxis: [
 		{
 			type: 'time',
+			splitNumber: 20,
 			splitLine: {
 				show: true,
 				lineStyle: {
 					type: 'dashed',
-					color: '#44484d'
+					color: '#999'
 				}
 			},
 			axisLine: {
@@ -35,12 +36,39 @@ export default {
 					color: '#44484d',
 				},
 			},
+			axisTick: {
+				// interval: 0,
+			},
 			axisLabel: {
 				inside: true,
 				color: '#999',
 				align: 'center',
-				showMinLabel: false,
-				showMaxLabel: false
+				formatter: (value) => {
+					const date = new Date(value)
+					function valueForTen (val) {
+						if (val > 9) {
+							return val
+						}
+						return `0${val}`
+					}
+					return `${valueForTen(date.getHours())}:${valueForTen(date.getMinutes())}:${valueForTen(date.getSeconds())}`
+				},
+				// showMinLabel: false,
+				// showMaxLabel: false
+			},
+			axisPointer: {
+				label: {
+					formatter: ({ value }) => {
+						const date = new Date(value)
+						function valueForTen (val) {
+							if (val > 9) {
+								return val
+							}
+							return `0${val}`
+						}
+						return `${valueForTen(date.getHours())}:${valueForTen(date.getMinutes())}:${valueForTen(date.getSeconds())}`
+					},
+				}
 			},
 			boundaryGap: ['1%', '10%']
 		},
@@ -49,7 +77,7 @@ export default {
 	grid: [{
 		show: true,
 		left: 100,
-		right: 2,
+		right: 4,
 		bottom: 38,
 		top: 0,
 		backgroundColor: '#3a3f44',

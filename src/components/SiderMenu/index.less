@@ -1,30 +1,70 @@
 @import '~antd/lib/style/themes/default.less';
 
-@nav-header-height: 90px;
+@nav-header-height: 85px;
 
+.menuParent {
+  background-color: #3a3f44;
+  padding: 40px 5px;
+  text-align: center;
+  border-bottom: 1px solid #555;
+  cursor: pointer;
+}
+
+.menuParent:hover,
 .menuParentActive {
-  background-image: linear-gradient(#314c69,
-      #557ca4);
+  background-image: linear-gradient(0deg,
+      #314c69 0%,
+      #557ca4 100%),
+    linear-gradient(#4f4f4f,
+      #4f4f4f);
+  background-blend-mode: normal,
+    normal;
   color: #fff;
 }
 
-.menuChildrenItem {
-  background-image: linear-gradient(#fbfbfb,
-      #e1e1e1);
-
-  a {
-    color: #333;
-  }
+.menuChildren {
+  background-image: linear-gradient(0deg,
+      #e0e0e0 42%,
+      #efefef 85%,
+      #fefefe 100%),
+    linear-gradient(#000000,
+      #000000);
+  background-blend-mode: normal,
+    normal;
 }
 
-.menuChildrenItemActive {
+.menuChildrenItem {
   background-image: linear-gradient(0deg,
-      #67b3d8 0%,
-      #5aa4ec 50%,
-      #4e95c6 100%);
+      #e0e0e0 0%,
+      #fefefe 100%),
+    linear-gradient(#000000,
+      #000000);
+  background-blend-mode: normal,
+    normal;
 
   a {
+    font-size: 16px;
+    color: #333;
+  }
+
+}
+
+.menuChildrenItem:hover,
+.menuChildrenItemActive {
+  background-image: linear-gradient(0deg,
+      #4d94c5 0%,
+      #67b4d8 100%),
+    linear-gradient(#ebebeb,
+      #ebebeb);
+  background-blend-mode: normal,
+    normal;
+
+  a {
+    display: inline-block;
     color: #fff;
+    font-size: 16px;
+    margin: -10px;
+    padding: 10px;
   }
 }
 
@@ -43,8 +83,8 @@
   img {
     display: inline-block;
     vertical-align: middle;
-    width: 160px;
-    height: 18px;
+    width: 175px;
+    height: 35px;
   }
 
   h1 {
