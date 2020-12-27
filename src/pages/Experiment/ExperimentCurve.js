@@ -246,10 +246,10 @@ class Curve extends PureComponent {
       <p className={styles.detailDataChildTitle}>
         <span
           style={{
-            backgroundColor: this.getColorByKey(item.key),
+            border: `4px solid ${this.getColorByKey(item.key)}`,
             display: 'inline-block',
-            width: 10,
-            height: 10,
+            width: 12,
+            height: 12,
             borderRadius: '100%',
             marginRight: 5
           }}
@@ -257,11 +257,11 @@ class Curve extends PureComponent {
         {item.name}
       </p>
       <div className={styles.detailDataChildContent}>
-        <p className={styles.detailDataChildContentValue}>
+        <p className={styles.detailDataChildContentValue} style={{ color: this.getColorByKey(item.key) }}>
           {item.value || '0'}
-          <span className={styles.detailDataChildContentUnit}>{item.unit}</span>
         </p>
       </div>
+      <span className={styles.detailDataChildContentUnit}>{item.unit}</span>
     </div>
   ))
 
@@ -356,10 +356,18 @@ class Curve extends PureComponent {
           </div>
           <div className={styles.detailChart}>
             <div className={styles.tools}>
-              <div className={dataZoomSelect ? styles.toolsActive : ''} onClick={() => this.toggleDataZoomSelect()}>放大</div>
-              <div onClick={() => this.restore()}>恢复</div>
-              <div onClick={() => this.showAxisModal()}>配置</div>
-              <div className={isShowTooltip ? styles.toolsActive : ''} onClick={() => this.toggleTooltip()}>提示</div>
+              <div className={dataZoomSelect ? styles.toolsActive : ''} onClick={() => this.toggleDataZoomSelect()}>
+                <img src={require('@/assets/toolsIcon/icon_toolbar_enlarge.png')} alt="" title="放大" />
+              </div>
+              <div onClick={() => this.restore()}>
+                <img src={require('@/assets/toolsIcon/icon_toolbar_reduction.png')} alt="" title="撤回" />
+              </div>
+              <div onClick={() => this.showAxisModal()}>
+                <img src={require('@/assets/toolsIcon/icon_toolbar_setting.png')} alt="" title="配置" />
+              </div>
+              <div className={isShowTooltip ? styles.toolsActive : ''} onClick={() => this.toggleTooltip()}>
+                <img src={require('@/assets/toolsIcon/icon_toolbar_tips.png')} alt="" title="提示" />
+              </div>
             </div>
             <LineChart ref={e => { this.lineChart = e }} onchange={() => this.onChartChange()} yConfigs={yConfigs} isShowTooltip={isShowTooltip} />
           </div>

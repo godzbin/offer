@@ -36,14 +36,21 @@ class LineChart2 extends Component {
           color: item.color,
         },
       },
+      axisTick: {
+        lineStyle: {
+          color: item.color
+        }
+      },
       axisLabel: {
         color: item.color,
         padding: [10, 0, 0, 0]
       },
-      nameLocation: 'start',
+      nameLocation: 'middle',
       nameTextStyle: {
         color: item.color,
-        align: 'right'
+        // align: 'left'
+        verticalAlign: 'bottom',
+        padding: [0, 0, 20, 0]
       },
       splitLine: {
         show: !index,

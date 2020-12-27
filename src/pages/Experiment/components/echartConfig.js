@@ -32,7 +32,7 @@ export default {
 			},
 			axisLine: {
 				lineStyle: {
-					color: '#3a3f44',
+					color: '#44484d',
 				},
 			},
 			axisLabel: {
@@ -68,8 +68,11 @@ export default {
 			id: `xAxis0`,
 			filterMode: 'none',
 			xAxisIndex: 0,
-			backgroundColor: '#2a2b31',
-			borderColor: '#2a2b31',
+			height: 20,
+			bottom: 10,
+			backgroundColor: '#d7d7d7',
+			borderColor: 'rgba(0,0,0,0.15)',
+			borderWidth: 10,
 			dataBackground: {
 				lineStyle: {},
 			},
