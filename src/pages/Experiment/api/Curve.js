@@ -27,3 +27,29 @@ export async function getYSettings () {
   return data
 }
 
+export async function updateYSetting (params) {
+  const { data = [] } = await request(`/curve/${params.key}/yaxle`, {
+    method: 'POST',
+    body: params
+  })
+  return data
+}
+
+export async function addYSetting (params) {
+  const { data } = await request(`/curve/${params.name}/yaxle`, {
+    method: 'PUT',
+    body: {
+      ...params,
+      key: params.name
+    }
+  })
+  return data
+}
+
+export async function removeYSetting (params) {
+  const { data } = await request(`/curve/${params.key}/yaxle`, {
+    method: 'DELETE'
+  })
+  return data
+}
+

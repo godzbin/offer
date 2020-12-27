@@ -36,9 +36,9 @@ class Curve extends PureComponent {
     dispatch({
       type: 'ExperimentCurve/getEquipmentInfo'
     })
-    // dispatch({
-    //   type: 'ExperimentCurve/getYSettings'
-    // })
+    dispatch({
+      type: 'ExperimentCurve/getYSettings'
+    })
     this.setChartData()
     this.setChartDataInterval()
   }
@@ -73,24 +73,36 @@ class Curve extends PureComponent {
   // 设置实时数据图表数据
   setChartInfoList () {
     const {
-      ExperimentCurve: { dataList = [], keyList = [], yConfigs }
+      ExperimentCurve: { dataList = [], keyList = [] }
     } = this.props
     const chart = this.lineChart.getChart()
     if (chart) {
       this.setState({
-        chartInfoList: yConfigs.reduce((result, item) => {
-          item.bindKey.forEach((bItem) => {
-            const keyObj = keyList.find((kItem) => kItem.key === bItem)
-            const data = dataList.find((dItem) => dItem.key === bItem) || {}
-            const color = chart.getModel().getSeriesByName(bItem)[0].getData().getVisual('color')
-            result.push({
-              ...keyObj,
-              color,
-              value: data.value ? data.value[data.value.length - 1].value.toFixed(2) : 0
-            })
-          })
-          return result
-        }, [])
+        // chartInfoList: yConfigs.reduce((result, { bindKey = [] }) => {
+        //   bindKey.forEach((bItem) => {
+        //     const keyObj = keyList.find((kItem) => kItem.key === bItem)
+        //     const data = dataList.find((dItem) => dItem.key === bItem) || {}
+        //     const series = chart.getModel().getSeriesByName(bItem)
+        //     const color = series.length ? series[0].getData().getVisual('color') : '#999'
+        //     result.push({
+        //       ...keyObj,
+        //       color,
+        //       value: data.value ? data.value[data.value.length - 1].value.toFixed(2) : 0
+        //     })
+        //   })
+        //   return result
+        // }, [])
+        chartInfoList: dataList.map((item) => {
+          const series = chart.getModel().getSeriesByName(item.key)
+          const color = series.length ? series[0].getData().getVisual('color') : '#999'
+          const data = keyList.find((dItem) => dItem.key === item.key) || {}
+          return {
+            ...item,
+            value: item.value[0].value,
+            color,
+            unit: data.unit
+          }
+        })
       })
     }
   }
@@ -102,20 +114,23 @@ class Curve extends PureComponent {
     const chart = this.lineChart.getChart()
     if (chart) {
       const option = chart.getOption()
-      option.series = yConfigs.reduce((result, item, index) => {
-        item.bindKey.forEach((bItem) => {
-          const data = dataList.find((dItem) => dItem.key === bItem)
-          result.push({
-            id: `${index}-${data.key}`,
-            yAxisIndex: index,
-            type: 'line',
-            name: data.key,
-            smooth: true,
-            data: data.value.map((cItem) => ({
-              name: cItem.time,
-              value: [cItem.time, cItem.value]
-            }))
-          })
+      const yConfigsFilter = yConfigs.filter((item) => item.showAxis)
+      option.series = yConfigsFilter.reduce((result, { bindKey = [] }, index) => {
+        bindKey.forEach((bItem) => {
+          const { key = '', value = [] } = dataList.find((dItem) => dItem.key === bItem) || {}
+          if (key) {
+            result.push({
+              id: `${index}-${key}`,
+              yAxisIndex: index,
+              type: 'line',
+              name: key,
+              smooth: true,
+              data: value.map((cItem) => ({
+                name: cItem.time,
+                value: [cItem.time, cItem.value]
+              }))
+            })
+          }
         })
         return result;
       }, [])
@@ -242,7 +257,7 @@ class Curve extends PureComponent {
 
   // 渲染曲线实时数据
   renderLineInfo = (list) => list.map((item) => (
-    <div className={styles.detailDataChild} key={item.name}>
+    <div className={styles.detailDataChild} key={item.key}>
       <p className={styles.detailDataChildTitle}>
         <span
           style={{
@@ -254,11 +269,11 @@ class Curve extends PureComponent {
             marginRight: 5
           }}
         />
-        {item.name}
+        {item.key}
       </p>
       <div className={styles.detailDataChildContent}>
         <p className={styles.detailDataChildContentValue} style={{ color: this.getColorByKey(item.key) }}>
-          {item.value || '0'}
+          {item.value.toFixed(2) || '0'}
         </p>
       </div>
       <span className={styles.detailDataChildContentUnit}>{item.unit}</span>
@@ -336,11 +351,38 @@ class Curve extends PureComponent {
 
   onConfigChange = async (yConfig) => {
     const { dispatch } = this.props
+    if (yConfig.key) {
+      await dispatch({
+        type: 'ExperimentCurve/changeYConfig',
+        payload: yConfig
+      })
+    } else {
+      await dispatch({
+        type: 'ExperimentCurve/addYConfig',
+        payload: yConfig
+      })
+    }
     await dispatch({
-      type: 'ExperimentCurve/changeYConfig',
+      type: 'ExperimentCurve/getYSettings'
+    })
+    this.restoreChart()
+  }
+
+  restoreChart = () => {
+    // setTimeout(() => {
+    //   this.lineChart.getChart().setOption(this.lineChart.getOption(), true)
+    // }, 2000)
+  }
+
+  async removeAxis (yConfig) {
+    const { dispatch } = this.props
+    await dispatch({
+      type: 'ExperimentCurve/removeYSetting',
       payload: yConfig
     })
-    this.renderChart(true)
+    await dispatch({
+      type: 'ExperimentCurve/getYSettings'
+    })
   }
 
   render () {
@@ -383,6 +425,7 @@ class Curve extends PureComponent {
         </div>
         <AxisModal
           visible={axisModalVisible}
+          removeAxis={(yConfig) => this.removeAxis(yConfig)}
           onCancel={this.onCancelAxisModal}
           yConfigs={yConfigs}
           keyList={keyList}

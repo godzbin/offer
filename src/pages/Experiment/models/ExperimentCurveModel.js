@@ -1,4 +1,4 @@
-import { getData, getEquipmentInfo, getKeyList, getYSettings } from '../api/Curve'
+import { addYSetting, getData, getEquipmentInfo, getKeyList, getYSettings, removeYSetting, updateYSetting } from '../api/Curve'
 
 export default {
 	namespace: 'ExperimentCurve',
@@ -6,27 +6,27 @@ export default {
 		keyList: [],
 		equipmentInfo: [],
 		yConfigs: [
-			{
-				key: 1,
-				name: '温度123456',
-				color: '#f00',
-				min: 0,
-				max: 100,
-				bindKey: [
-					'ut-1',
-					'ut-2'
-				]
-			},
-			{
-				key: 2,
-				name: '温度2',
-				color: '#000',
-				min: 0,
-				max: 100,
-				bindKey: [
-					'ut-3'
-				]
-			}
+			// {
+			// 	key: 1,
+			// 	name: '温度123456',
+			// 	color: '#f00',
+			// 	min: 0,
+			// 	max: 100,
+			// 	bindKey: [
+			// 		'ut-1',
+			// 		'ut-2'
+			// 	]
+			// },
+			// {
+			// 	key: 2,
+			// 	name: '温度2',
+			// 	color: '#000',
+			// 	min: 0,
+			// 	max: 100,
+			// 	bindKey: [
+			// 		'ut-3'
+			// 	]
+			// }
 		],
 		dataList: []
 	},
@@ -56,10 +56,15 @@ export default {
 			const data = yield call(getYSettings);
 			yield put({ type: 'setYSettings', payload: data })
 		},
-		*changeYConfig ({ payload }, { put }) {
-			// const data = yield call(updateYSetting);
-			console.log(payload)
-			yield put({ type: 'setYSetting', payload })
+		*changeYConfig ({ payload }, { call }) {
+			yield call(updateYSetting, payload);
+			// yield put({ type: 'setYSetting', payload })
+		},
+		*addYConfig ({ payload }, { call }) {
+			yield call(addYSetting, payload)
+		},
+		*removeYSetting ({ payload }, { call }) {
+			yield call(removeYSetting, payload)
 		}
 	},
 	reducers: {
@@ -92,16 +97,15 @@ export default {
 			return { ...state, dataList }
 		},
 		setYSettings (state, { payload }) {
-			const yConfigs = Object.keys(payload).map((item) => {
-				const data = JSON.parse(payload[item])
-				data[0].name = item
-				return data[0]
-			})
-			return { ...state, yConfigs }
+			// const yConfigs = Object.keys(payload).map((item) => {
+			// 	const data = JSON.parse(payload[item])
+			// 	data[0].name = item
+			// 	return data[0]
+			// })
+			return { ...state, yConfigs: payload }
 		},
 		setYSetting (state, { payload }) {
 			const { yConfigs } = state
-			console.log(payload)
 			const index = yConfigs.findIndex((item) => item.key === payload.key)
 			yConfigs[index] = payload
 			return {

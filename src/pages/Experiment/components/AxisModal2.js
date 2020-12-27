@@ -1,6 +1,7 @@
-import { Button, Card, Checkbox, Col, Modal, Row, Table, Transfer } from 'antd';
+import { Button, Card, Checkbox, Col, Modal, Popconfirm, Row, Table, Transfer } from 'antd';
 import React, { Component } from 'react';
 
+import EditAxisModal from './EditAxisModal2';
 import styles from '../ModalStyle';
 
 class AxisModal extends Component {
@@ -33,19 +34,25 @@ class AxisModal extends Component {
       width: 280,
       render: (val, record) => (
         <div>
-          <Button type="link" onClick={e => this.editAxis(record.id, e)}>
+          <Button type="link" onClick={() => this.editAxis(record)}>
             修改
           </Button>
           <Button type="link" onClick={e => this.editDataBind(record, e)}>
             修改坐标数值
           </Button>
-          <Button
-            type="link"
-            style={{ color: '#f00' }}
-            onClick={e => this.removeAxis(record.id, e)}
+          <Popconfirm
+            title="你确定要删除这个配置吗？"
+            onConfirm={e => this.removeAxis(record)}
+            okText="确定"
+            cancelText="取消"
           >
-            删除
-          </Button>
+            <Button
+              type="link"
+              style={{ color: '#f00' }}
+            >
+              删除
+            </Button>
+          </Popconfirm>
         </div>
       ),
     },
@@ -59,6 +66,7 @@ class AxisModal extends Component {
       editAxisModalVisible: false,
       editAxisId: '',
     };
+    this.editAxisModal = ''
   };
 
   onCancel = () => {
@@ -70,13 +78,17 @@ class AxisModal extends Component {
     this.onCancel()
   }
 
-  editAxis = () => {
+  editAxis = (record) => {
+    console.log(this.editAxisModal)
+    this.editAxisModal.setFormData({ ...record })
+    this.setState({
+      editAxisModalVisible: true
+    })
   }
 
   editDataBind = (record) => {
     this.setState({
       selectLine: record
-      // selectId: record.id,
     });
   }
 
@@ -106,16 +118,19 @@ class AxisModal extends Component {
     )
   }
 
-  removeAxis = () => {
-
+  removeAxis = (record) => {
+    const { removeAxis } = this.props
+    if (removeAxis) removeAxis(record)
   }
 
-  onShowAxisChange = () => {
-
+  onShowAxisChange = (record) => {
+    const { onChange } = this.props;
+    if (onChange) onChange({ ...record, showAxis: !record.showAxis })
   }
 
-  onShowNameChange = () => {
-
+  onShowNameChange = (record) => {
+    const { onChange } = this.props;
+    if (onChange) onChange({ ...record, showName: !record.showName })
   }
 
   renderAddAxisButton = () => (
@@ -124,8 +139,37 @@ class AxisModal extends Component {
     </Button>
   )
 
+  addAxis = () => {
+    this.editAxisModal.setFormData({
+      name: '',
+      min: '',
+      max: '',
+      color: '#999',
+      showAxis: true,
+      showName: true,
+      bindKey: []
+    })
+    this.setState({
+      editAxisModalVisible: true
+    })
+  }
+
+  onEditOk = params => {
+    const { onChange } = this.props;
+    if (onChange) onChange({ ...params })
+    this.setState({
+      editAxisModalVisible: false
+    })
+  }
+
+  onEditCancel = () => {
+    this.setState({
+      editAxisModalVisible: false
+    })
+  }
+
   render () {
-    const { selectLine } = this.state
+    const { selectLine, editAxisId, editAxisModalVisible } = this.state
     const { visible, yConfigs } = this.props
     return (
       <Modal
@@ -164,6 +208,13 @@ class AxisModal extends Component {
             )}
           </Col>
         </Row>
+        <EditAxisModal
+          ref={e => { this.editAxisModal = e }}
+          editId={editAxisId}
+          visible={editAxisModalVisible}
+          onOk={this.onEditOk}
+          onCancel={this.onEditCancel}
+        />
       </Modal>
     )
   }
