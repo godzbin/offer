@@ -68,9 +68,12 @@ class LineChart2 extends Component {
       }]
       const { dataZoom = [] } = options
       options.dataZoom = yConfigs.reduce((result, item, index) => {
-        const itemZoom = result.find((zoom) => item.name === zoom.id)
+        const itemZoom = result.find((zoom) => `yAxis-${item.name}` === zoom.id)
         if (itemZoom) {
-          itemZoom.backgroundColor = item.color
+          itemZoom.fillerColor = hexToRgba(item.color, 0.2);
+          itemZoom.show = item.showAxis;
+          itemZoom.left = this.yWidth * (yConfigsFilter.length - yConfigsFilter.findIndex((f) => f.key === item.key)) - this.dataZoomWidth;
+          itemZoom.yAxisIndex = index;
         } else {
           result.push({
             id: `${item.name}`,
@@ -91,7 +94,7 @@ class LineChart2 extends Component {
           })
         }
         return result
-      }, [dataZoom[0], dataZoom[1]])
+      }, dataZoom)
     } else {
       options.yAxis = defaultOptions.yAxis
       options.grid = [{

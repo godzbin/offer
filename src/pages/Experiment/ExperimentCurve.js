@@ -19,7 +19,8 @@ class Curve extends PureComponent {
       checkedList: [],
       axisModalVisible: false,
       dataZoomSelect: false, // 刷选状态
-      isShowTooltip: true
+      isShowTooltip: true,
+      isShowSelect: true
     };
     this.lineChart = ''
     this.intervalIndex = ''
@@ -33,10 +34,10 @@ class Curve extends PureComponent {
       type: 'ExperimentCurve/getKeyList'
     })
     this.selectAllKey()
-    dispatch({
+    await dispatch({
       type: 'ExperimentCurve/getEquipmentInfo'
     })
-    dispatch({
+    await dispatch({
       type: 'ExperimentCurve/getYSettings'
     })
     this.setChartData()
@@ -56,7 +57,7 @@ class Curve extends PureComponent {
       } catch (e) {
         console.log(e.message)
       }
-    }, 60000)
+    }, 50000)
   }
 
   // 获取实时数据
@@ -114,8 +115,8 @@ class Curve extends PureComponent {
     const chart = this.lineChart.getChart()
     if (chart) {
       const option = chart.getOption()
-      const yConfigsFilter = yConfigs.filter((item) => item.showAxis)
-      option.series = yConfigsFilter.reduce((result, { bindKey = [] }, index) => {
+      // const yConfigsFilter = yConfigs.filter((item) => item.showAxis)
+      option.series = yConfigs.reduce((result, { bindKey = [] }, index) => {
         bindKey.forEach((bItem) => {
           const { key = '', value = [] } = dataList.find((dItem) => dItem.key === bItem) || {}
           if (key) {
@@ -389,14 +390,19 @@ class Curve extends PureComponent {
     const {
       ExperimentCurve: { keyList = [], equipmentInfo = [], yConfigs = [] }
     } = this.props
-    const { chartInfoList, axisModalVisible, dataZoomSelect, isShowTooltip } = this.state
+    const { chartInfoList, axisModalVisible, dataZoomSelect, isShowTooltip, isShowSelect } = this.state
     return (
       <div>
         <div className={styles.content}>
           <div className={styles.title}>
             实时趋势
           </div>
-          <div className={styles.detailChart}>
+          <div
+            className={styles.detailChart}
+            style={
+              { marginRight: isShowSelect ? 135 : 20 }
+            }
+          >
             <div className={styles.tools}>
               <div className={dataZoomSelect ? styles.toolsActive : ''} onClick={() => this.toggleDataZoomSelect()}>
                 <img src={require('@/assets/toolsIcon/icon_toolbar_enlarge.png')} alt="" title="放大" />
@@ -413,10 +419,28 @@ class Curve extends PureComponent {
             </div>
             <LineChart ref={e => { this.lineChart = e }} onchange={() => this.onChartChange()} yConfigs={yConfigs} isShowTooltip={isShowTooltip} />
           </div>
-          {this.renderSelect(keyList)}
+          <div
+            className={styles.showSelect}
+            style={
+              {
+                right: isShowSelect ? 130 : 20,
+                paddingLeft: isShowSelect ? 3 : 0,
+                paddingRight: isShowSelect ? 0 : 3,
+              }
+            }
+            onClick={() => {
+              this.setState({
+                isShowSelect: !isShowSelect
+              })
+            }}
+          >
+            {isShowSelect ? '》' : '《'}
+          </div>
+          {isShowSelect && this.renderSelect(keyList)}
         </div>
         <div className={styles.detailFooter}>
           <div className={styles.detailData}>
+            <img className={styles.detailDataMore} src={require('@/assets/toolsIcon/icon_enlarge.png')} title="更多" alt="" />
             {this.renderLineInfo(chartInfoList)}
           </div>
           <div className={styles.detailInfo}>
@@ -431,7 +455,7 @@ class Curve extends PureComponent {
           keyList={keyList}
           onChange={(params) => this.onConfigChange(params)}
         />
-      </div>
+      </div >
     )
   }
 }

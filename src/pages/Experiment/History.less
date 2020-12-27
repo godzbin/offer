@@ -38,6 +38,26 @@
   box-shadow: 1px 1px 4px rgb(150, 150, 150);
 }
 
+.showSelect {
+  position: absolute;
+  z-index: 999;
+  right: 130px;
+  top: 50%;
+  width: 16px;
+  height: 66px;
+  line-height: 66px;
+  text-align: center;
+  background-image: linear-gradient(0deg,
+      #e0e0e0 0%,
+      #fefefe 100%),
+    linear-gradient(#ffffff,
+      #ffffff);
+  background-blend-mode: normal,
+    normal;
+  border: solid 1px #e0e0e0;
+  cursor: pointer;
+}
+
 .detailChart {
   position: relative;
   border: 1px solid #e0e0e0;
@@ -118,14 +138,26 @@
 }
 
 .detailData {
+  position: relative;
   box-sizing: border-box;
-  padding: 20px;
+  padding: 20px 40px 20px 20px;
   margin-right: 300px;
   height: 100%;
   overflow: scroll;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
+
+  .detailDataMore {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
 
   .detailDataChild {
     position: relative;
