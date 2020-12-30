@@ -4,7 +4,7 @@ export default {
 		trigger: 'axis',
 		showContent: true,
 	},
-	backgroundColor: '#fff',
+	backgroundColor: 'transparent',
 	toolbox: {
 		show: true,
 		top: -100,
@@ -40,8 +40,10 @@ export default {
 				// interval: 0,
 			},
 			axisLabel: {
-				inside: true,
-				color: '#999',
+				color: '#44484d',
+				textStyle: {
+					color: "#44484d"
+				},
 				align: 'center',
 				formatter: (value) => {
 					const date = new Date(value)
@@ -53,8 +55,8 @@ export default {
 					}
 					return `${valueForTen(date.getHours())}:${valueForTen(date.getMinutes())}:${valueForTen(date.getSeconds())}`
 				},
-				// showMinLabel: false,
-				// showMaxLabel: false
+				showMinLabel: false,
+				showMaxLabel: false
 			},
 			axisPointer: {
 				label: {
@@ -78,7 +80,7 @@ export default {
 		show: true,
 		left: 100,
 		right: 4,
-		bottom: 38,
+		bottom: 58,
 		top: 0,
 		backgroundColor: '#3a3f44',
 		borderColor: '#3a3f44'

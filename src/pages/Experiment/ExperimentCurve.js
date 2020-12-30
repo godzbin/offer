@@ -426,8 +426,7 @@ class Curve extends PureComponent {
             style={
               {
                 right: isShowSelect ? 190 : 20,
-                paddingLeft: isShowSelect ? 3 : 0,
-                paddingRight: isShowSelect ? 0 : 3,
+                textIndent: isShowSelect ? 3 : -8
               }
             }
             onClick={() => {

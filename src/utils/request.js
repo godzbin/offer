@@ -64,6 +64,7 @@ const checkStatus = response => {
  */
 export default function request (url, option) {
   url = "http://8.129.43.118:7000" + url;
+  // url = "http://127.0.0.1:7000" + url;
   console.log(url)
 
   const options = {

@@ -89,7 +89,7 @@ class LineChart2 extends Component {
             fillerColor: hexToRgba(item.color, 0.2),
             // show: true,
             filterMode: 'none',
-            height: '93%',
+            height: '89%',
             showDataShadow: false,
           })
         }
