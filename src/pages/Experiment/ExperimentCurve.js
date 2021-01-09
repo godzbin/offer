@@ -395,8 +395,8 @@ class Curve extends PureComponent {
     const { chartInfoList, axisModalVisible, dataZoomSelect, isShowTooltip, isShowSelect } = this.state
     return (
       <div>
-        <div className={styles.content}>
-          <div className={styles.title}>
+        <div className="pageContent">
+          <div className='pageHeader'>
             实时趋势
           </div>
           <div

@@ -5,9 +5,9 @@ export default {
   'menu.trend.info': '基础信息',
   'menu.trend.analysis': '实时趋势',
   'menu.trend.monitor': '运行状态',
-  'menu.trend.workplace': '网络配置',
-  'menu.trend.workplace1': '更改网络配置',
-  'menu.trend.workplace2': '设备标识',
+  'menu.settings.connectNetwork': '网络配置',
+  'menu.settings.changeNetwork': '更改网络配置',
+  'menu.settings.workplace2': '设备标识',
   'menu.record': '日志',
   'menu.admin': '管理'
 };
