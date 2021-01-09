@@ -41,13 +41,27 @@ export default [
             name: 'monitor',
             icon: 'function',
             component: './Dashboard/Monitor',
-          },
+          }
         ],
       },
       {
         path: '/record',
         name: 'record',
         icon: 'record',
+        routes: [
+          {
+            path: '/record/systemRecord',
+            name: 'systemRecord',
+            icon: 'record',
+            component: './Record/SystemRecord',
+          },
+          {
+            path: '/record/runningRecord',
+            name: 'runningRecord',
+            icon: 'record',
+            component: './Record/RunningRecord',
+          }
+        ]
       },
       {
         path: '/admin',
