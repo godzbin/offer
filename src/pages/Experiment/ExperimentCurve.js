@@ -276,7 +276,7 @@ class Curve extends PureComponent {
       </p>
       <div className={styles.detailDataChildContent}>
         <p className={styles.detailDataChildContentValue} style={{ color: this.getColorByKey(item.key) }}>
-          {item.value.toFixed(2) || '0'}
+          {Number(item.value).toFixed(2) || '0'}
         </p>
       </div>
       <span className={styles.detailDataChildContentUnit}>{item.unit}</span>
