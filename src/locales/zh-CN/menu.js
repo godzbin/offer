@@ -4,7 +4,7 @@ export default {
   'menu.trend': '实时数据',
   'menu.trend.info': '基础信息',
   'menu.trend.analysis': '实时趋势',
-  'menu.trend.monitor': '运行状态',
+  'menu.trend.runStatus': '运行状态',
   'menu.settings.connectNetwork': '网络配置',
   'menu.settings.changeNetwork': '更改网络配置',
   'menu.settings.workplace2': '设备标识',

@@ -1,0 +1,42 @@
+.statusList {
+  display: flex;
+  border-top: 1px solid #ddd;
+  box-shadow: 1px 1px 3px #eee;
+
+  &>div {
+    text-align: center;
+    width: 33.33%;
+    background-image: linear-gradient(0deg,
+        #e0e0e0 0%,
+        #fefefe 100%),
+      linear-gradient(#ffffff,
+        #ffffff);
+    background-blend-mode: normal,
+      normal;
+    padding: 20px;
+    position: relative;
+
+    &:after {
+      content: '';
+      position: absolute;
+      height: 100%;
+      width: 1px;
+      right: 0;
+      top: 0;
+      background-color: #ccc;
+    }
+
+    &:last-child::after {
+      width: 0;
+    }
+
+    // border-right: 1px #e8e8e8 solid;
+    // box-shadow: 1px 1px 1px #eeeeee;
+
+    p {
+      font-size: 18px;
+      color: #666666;
+      margin-bottom: 20px;
+    }
+  }
+}

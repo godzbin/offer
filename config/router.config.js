@@ -37,10 +37,10 @@ export default [
             component: './Experiment/ExperimentCurve',
           },
           {
-            path: '/trend/monitor',
-            name: 'monitor',
+            path: '/trend/runStatus',
+            name: 'runStatus',
             icon: 'function',
-            component: './Dashboard/Monitor',
+            component: './RunStatus/index',
           }
         ],
       },

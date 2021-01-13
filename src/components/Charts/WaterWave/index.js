@@ -13,7 +13,7 @@ class WaterWave extends PureComponent {
     radio: 1,
   };
 
-  componentDidMount() {
+  componentDidMount () {
     this.renderChart();
     this.resize();
     window.addEventListener(
@@ -25,7 +25,7 @@ class WaterWave extends PureComponent {
     );
   }
 
-  componentDidUpdate(props) {
+  componentDidUpdate (props) {
     const { percent } = this.props;
     if (props.percent !== percent) {
       // 不加这个会造成绘制缓慢
@@ -33,7 +33,7 @@ class WaterWave extends PureComponent {
     }
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     cancelAnimationFrame(this.timer);
     if (this.node) {
       this.node.innerHTML = '';
@@ -51,9 +51,9 @@ class WaterWave extends PureComponent {
     }
   };
 
-  renderChart(type) {
+  renderChart (type) {
     const { percent, color = '#1890FF' } = this.props;
-    const data = percent / 100;
+    const data = percent ? percent / 100 : 0;
     const self = this;
     cancelAnimationFrame(this.timer);
 
@@ -94,10 +94,9 @@ class WaterWave extends PureComponent {
     ctx.strokeStyle = color;
     ctx.moveTo(cStartPoint[0], cStartPoint[1]);
 
-    function drawSin() {
+    function drawSin () {
       ctx.beginPath();
       ctx.save();
-
       const sinStack = [];
       for (let i = xOffset; i <= xOffset + axisLength; i += 20 / axisLength) {
         const x = sp + (xOffset + i) / unit;
@@ -123,7 +122,7 @@ class WaterWave extends PureComponent {
       ctx.restore();
     }
 
-    function render() {
+    function render () {
       ctx.clearRect(0, 0, canvasWidth, canvasHeight);
       if (circleLock && type !== 'update') {
         if (arcStack.length) {
@@ -140,7 +139,6 @@ class WaterWave extends PureComponent {
           ctx.beginPath();
           ctx.lineWidth = lineWidth;
           ctx.arc(radius, radius, bR, 0, 2 * Math.PI, 1);
-
           ctx.beginPath();
           ctx.save();
           ctx.arc(radius, radius, radius - 3 * lineWidth, 0, 2 * Math.PI, 1);
@@ -185,7 +183,7 @@ class WaterWave extends PureComponent {
     render();
   }
 
-  render() {
+  render () {
     const { radio } = this.state;
     const { percent, title, height } = this.props;
     return (
