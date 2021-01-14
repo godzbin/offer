@@ -80,20 +80,6 @@ class Curve extends PureComponent {
     const chart = this.lineChart.getChart()
     if (chart) {
       this.setState({
-        // chartInfoList: yConfigs.reduce((result, { bindKey = [] }) => {
-        //   bindKey.forEach((bItem) => {
-        //     const keyObj = keyList.find((kItem) => kItem.key === bItem)
-        //     const data = dataList.find((dItem) => dItem.key === bItem) || {}
-        //     const series = chart.getModel().getSeriesByName(bItem)
-        //     const color = series.length ? series[0].getData().getVisual('color') : '#999'
-        //     result.push({
-        //       ...keyObj,
-        //       color,
-        //       value: data.value ? data.value[data.value.length - 1].value.toFixed(2) : 0
-        //     })
-        //   })
-        //   return result
-        // }, [])
         chartInfoList: dataList.map((item) => {
           const series = chart.getModel().getSeriesByName(item.key)
           const color = series.length ? series[0].getData().getVisual('color') : '#999'
@@ -117,23 +103,25 @@ class Curve extends PureComponent {
     if (chart) {
       const option = chart.getOption()
       // const yConfigsFilter = yConfigs.filter((item) => item.showAxis)
-      option.series = yConfigs.reduce((result, { bindKey = [] }, index) => {
-        bindKey.forEach((bItem) => {
-          const { key = '', value = [] } = dataList.find((dItem) => dItem.key === bItem) || {}
-          if (key) {
-            result.push({
-              id: `${index}-${key}`,
-              yAxisIndex: index,
-              type: 'line',
-              name: key,
-              smooth: true,
-              data: value.map((cItem) => ({
-                name: cItem.time,
-                value: [cItem.time, cItem.value]
-              }))
-            })
-          }
-        })
+      option.series = yConfigs.reduce((result, { bindKey = [], showAxis }, index) => {
+        if (showAxis) {
+          bindKey.forEach((bItem) => {
+            const { key = '', value = [] } = dataList.find((dItem) => dItem.key === bItem) || {}
+            if (key) {
+              result.push({
+                id: `${index}-${key}`,
+                yAxisIndex: index,
+                type: 'line',
+                name: key,
+                smooth: true,
+                data: value.map((cItem) => ({
+                  name: cItem.time,
+                  value: [cItem.time, cItem.value]
+                }))
+              })
+            }
+          })
+        }
         return result;
       }, [])
       chart.setOption(option, isRestore)
@@ -372,6 +360,7 @@ class Curve extends PureComponent {
   }
 
   restoreChart = () => {
+    this.renderChart(true)
     // setTimeout(() => {
     //   this.lineChart.getChart().setOption(this.lineChart.getOption(), true)
     // }, 2000)
