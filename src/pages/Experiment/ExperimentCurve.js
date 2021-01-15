@@ -84,9 +84,10 @@ class Curve extends PureComponent {
           const series = chart.getModel().getSeriesByName(item.key)
           const color = series.length ? series[0].getData().getVisual('color') : '#999'
           const data = keyList.find((dItem) => dItem.key === item.key) || {}
+          const lastValue = item.value[item.value.length - 1] || {}
           return {
             ...item,
-            value: item.value[0].value,
+            value: lastValue.value,
             color,
             unit: data.unit
           }

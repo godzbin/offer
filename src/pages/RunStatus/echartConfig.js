@@ -101,8 +101,8 @@ export default {
 		right: 4,
 		bottom: 50,
 		top: 30,
-		backgroundColor: '#3a3f44',
-		borderColor: '#3a3f44'
+		// backgroundColor: '#3a3f44',
+		// borderColor: '#3a3f44'
 	}],
 	// yAxis: [
 	// 	{
