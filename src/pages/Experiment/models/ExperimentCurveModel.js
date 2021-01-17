@@ -79,18 +79,24 @@ export default {
 		},
 		setDataList (state, { payload = [] }) {
 			const { dataList } = state
+			const time = new Date()
+			//  保留 3个小时数据
+			const maxLength = 60 * 60 * 3 / 5
 			payload.forEach((item) => {
 				const keyData = dataList.find((dItem) => dItem.key === item.key)
 				if (keyData) {
 					const { value = [] } = keyData
 					value.push({
-						time: new Date(),
+						time,
 						value: item.value
 					})
+					if (value.length > maxLength) {
+						value.shift()
+					}
 				} else {
 					dataList.push({
 						key: item.key,
-						value: [{ time: new Date(), value: item.value }]
+						value: [{ time, value: item.value }]
 					})
 				}
 			})
