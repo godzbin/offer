@@ -90,11 +90,11 @@ export default class BaseMenu extends PureComponent {
     if (selectParentMenu) {
       selectedKeys[0] = selectParentMenu
     }
-    const leftStyle = { color: '#a4bcd6', float: 'left', width: '85px' }
-    const rightStyle = { float: 'right', width: '200px', height: 'calc(100vh - 86px)', borderLeft: '2px solid #bbb' }
+    const leftStyle = { color: '#a4bcd6', float: 'left', width: '100px' }
+    const rightStyle = { float: 'right', width: '100%', height: 'calc(100vh - 86px)', borderLeft: '2px solid #bbb', overflowY: 'auto' }
     return (
       // 左边主菜单
-      <div>
+      <div style={{ display: 'flex' }}>
         <div style={leftStyle}>
           {this.getNavMenuByParent(menuData, selectedKeys)}
         </div>
