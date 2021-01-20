@@ -28,21 +28,7 @@ class Curve extends PureComponent {
   }
 
   async componentDidMount () {
-    const {
-      dispatch
-    } = this.props
-    await dispatch({
-      type: 'ExperimentCurve/getKeyList'
-    })
-    this.selectAllKey()
-    await dispatch({
-      type: 'ExperimentCurve/getEquipmentInfo'
-    })
-    await dispatch({
-      type: 'ExperimentCurve/getYSettings'
-    })
-    this.setChartData()
-    this.setChartDataInterval()
+    this.init()
   }
 
   componentWillUnmount () {
@@ -66,6 +52,9 @@ class Curve extends PureComponent {
     const {
       dispatch
     } = this.props
+    await dispatch({
+      type: 'ExperimentCurve/getKeyList'
+    })
     await dispatch({
       type: 'ExperimentCurve/getData'
     })
@@ -365,6 +354,35 @@ class Curve extends PureComponent {
     // setTimeout(() => {
     //   this.lineChart.getChart().setOption(this.lineChart.getOption(), true)
     // }, 2000)
+  }
+
+  async init () {
+    try {
+      const {
+        dispatch
+      } = this.props
+      // await dispatch({
+      //   type: 'ExperimentCurve/getKeyList',
+      //   callback: () => {
+      //     setTimeout(() => {
+      //       this.init()
+      //     }, 5000)
+      //   }
+      // })
+      this.selectAllKey()
+      await dispatch({
+        type: 'ExperimentCurve/getEquipmentInfo'
+      })
+      await dispatch({
+        type: 'ExperimentCurve/getYSettings'
+      })
+      this.setChartData()
+      this.setChartDataInterval()
+    } catch (e) {
+      setTimeout(() => {
+        this.init()
+      }, 5000)
+    }
   }
 
   async removeAxis (yConfig) {

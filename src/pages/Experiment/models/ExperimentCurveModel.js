@@ -31,12 +31,17 @@ export default {
 		dataList: []
 	},
 	effects: {
-		*getKeyList (_, { call, put }) {
-			const data = yield call(getKeyList);
-			yield put({
-				type: 'setKeyList',
-				payload: data
-			})
+		*getKeyList ({ callback }, { call, put }) {
+			try {
+				const data = yield call(getKeyList);
+				yield put({
+					type: 'setKeyList',
+					payload: data
+				})
+			} catch (e) {
+				console.log(e)
+				if (callback) callback(e)
+			}
 		},
 		*getData (_, { call, put }) {
 			const data = yield call(getData)
