@@ -85,8 +85,8 @@ export default {
 		setDataList (state, { payload = [] }) {
 			const { dataList } = state
 			const time = new Date()
-			//  保留 1个小时数据
-			const maxLength = 60 * 60 * 1 / 5
+			//  保留 半个小时数据
+			const maxLength = 60 * 60 * 0.5 / 5
 			payload.forEach((item) => {
 				const keyData = dataList.find((dItem) => dItem.key === item.key)
 				if (keyData) {
