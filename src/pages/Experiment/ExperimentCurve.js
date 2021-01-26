@@ -481,7 +481,7 @@ class Curve extends PureComponent {
           keyList={keyList}
           onChange={(params) => this.onConfigChange(params)}
         />
-      </div >
+      </div>
     )
   }
 }
