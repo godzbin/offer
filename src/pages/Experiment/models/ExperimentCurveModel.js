@@ -39,7 +39,6 @@ export default {
 					payload: data
 				})
 			} catch (e) {
-				console.log(e)
 				if (callback) callback(e)
 			}
 		},

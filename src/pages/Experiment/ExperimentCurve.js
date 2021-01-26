@@ -64,21 +64,33 @@ class Curve extends PureComponent {
   // 设置实时数据图表数据
   setChartInfoList () {
     const {
-      ExperimentCurve: { dataList = [], keyList = [] }
+      ExperimentCurve: { dataList = [], keyList = [], yConfigs = [] }
     } = this.props
     const chart = this.lineChart.getChart()
     if (chart) {
+      const allBindKey = yConfigs.reduce((result, item) => {
+        const { bindKey = [] } = item
+        bindKey.forEach((key) => {
+          if (!result.includes(key)) {
+            result.push(key)
+          }
+        })
+        return result;
+      }, [])
       this.setState({
-        chartInfoList: dataList.map((item) => {
-          const series = chart.getModel().getSeriesByName(item.key)
+        chartInfoList: allBindKey.map((key) => {
+          const data = dataList.find((item) => item.key === key) || { value: [] }
+          const series = chart.getModel().getSeriesByName(data.key)
           const color = series.length ? series[0].getData().getVisual('color') : '#999'
-          const data = keyList.find((dItem) => dItem.key === item.key) || {}
-          const lastValue = item.value[item.value.length - 1] || {}
+          const keyData = keyList.find((dItem) => dItem.key === data.key) || {}
+          const lastValue = data.value[data.value.length - 1] || {}
           return {
-            ...item,
-            value: lastValue.value,
+            ...keyData,
+            ...data,
+            key,
+            value: lastValue.value || '',
             color,
-            unit: data.unit
+            unit: keyData.unit
           }
         })
       })
@@ -104,6 +116,7 @@ class Curve extends PureComponent {
                 type: 'line',
                 name: key,
                 smooth: true,
+                showSymbol: false,
                 data: value.map((cItem) => ({
                   name: cItem.time,
                   value: [cItem.time, cItem.value]
@@ -122,12 +135,14 @@ class Curve extends PureComponent {
 
   // 
   selectAllKey = () => {
-    const {
-      ExperimentCurve: { keyList }
-    } = this.props
+    // const {
+    //   ExperimentCurve: { keyList }
+    // } = this.props
+
+    const { chartInfoList } = this.state
 
     this.setState({
-      checkedList: keyList.map((item) => item.key)
+      checkedList: chartInfoList.map((item) => item.key)
     })
   }
 
@@ -217,7 +232,7 @@ class Curve extends PureComponent {
                     marginRight: 5
                   }}
                 />
-                {item.name}
+                {item.key}
               </Checkbox>
             </div>
           ))}
@@ -254,7 +269,7 @@ class Curve extends PureComponent {
       </p>
       <div className={styles.detailDataChildContent}>
         <p className={styles.detailDataChildContentValue} style={{ color: this.getColorByKey(item.key) }}>
-          {Number(item.value).toFixed(2) || '0'}
+          {Number(item.value) ? Number(item.value).toFixed(2) : ''}
         </p>
       </div>
       <span className={styles.detailDataChildContentUnit}>{item.unit}</span>
@@ -376,7 +391,8 @@ class Curve extends PureComponent {
       await dispatch({
         type: 'ExperimentCurve/getYSettings'
       })
-      this.setChartData()
+      await this.setChartData()
+      this.checkedAll()
       this.setChartDataInterval()
     } catch (e) {
       setTimeout(() => {
@@ -445,7 +461,8 @@ class Curve extends PureComponent {
           >
             {isShowSelect ? '》' : '《'}
           </div>
-          {isShowSelect && this.renderSelect(keyList)}
+          {/* 绘制选择列表 */}
+          {isShowSelect && this.renderSelect(chartInfoList)}
         </div>
         <div className={styles.detailFooter}>
           <div className={styles.detailData}>
