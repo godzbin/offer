@@ -86,14 +86,17 @@ export default {
 			const time = new Date()
 			//  保留 半个小时数据
 			const maxLength = 60 * 60 * 0.5 / 5
+			dataList.forEach((item) => {
+				item.value.push({
+					time,
+					value: null
+				})
+			})
 			payload.forEach((item) => {
 				const keyData = dataList.find((dItem) => dItem.key === item.key)
 				if (keyData) {
 					const { value = [] } = keyData
-					value.push({
-						time,
-						value: item.value
-					})
+					value[value.length - 1].value = item.value
 					if (value.length > maxLength) {
 						value.shift()
 					}

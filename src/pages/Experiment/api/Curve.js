@@ -36,7 +36,7 @@ export async function updateYSetting (params) {
 }
 
 export async function addYSetting (params) {
-  const { data } = await request(`/curve/${params.name}/yaxle`, {
+  const { data = [] } = await request(`/curve/${params.name}/yaxle`, {
     method: 'PUT',
     body: {
       ...params,
@@ -47,7 +47,7 @@ export async function addYSetting (params) {
 }
 
 export async function removeYSetting (params) {
-  const { data } = await request(`/curve/${params.key}/yaxle`, {
+  const { data = [] } = await request(`/curve/${params.key}/yaxle`, {
     method: 'DELETE'
   })
   return data
