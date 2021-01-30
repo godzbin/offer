@@ -62,7 +62,6 @@ class AxisModal extends Component {
     super(props);
     this.state = {
       selectLine: {},
-      selectId: '',
       editAxisModalVisible: false,
       editAxisId: '',
     };
@@ -86,27 +85,27 @@ class AxisModal extends Component {
     })
   }
 
-  editDataBind = (record) => {
+  editDataBind = (record = {}) => {
     this.setState({
       selectLine: record
     });
   }
 
-  onTransferChange = (params) => {
-    const { selectLine } = this.state;
+  onTransferChange = (params = []) => {
+    const { selectLine = {} } = this.state;
     const { onChange } = this.props;
     selectLine.bindKey = params;
     if (onChange) onChange({ ...selectLine })
   }
 
   renderTypeList = () => {
-    const { selectLine } = this.state
-    const { keyList } = this.props
+    const { selectLine = {} } = this.state
+    const { keyList = [] } = this.props
     return (
       <Transfer
         dataSource={keyList}
         titles={['未绑定', '已绑定']}
-        targetKeys={selectLine.bindKey}
+        targetKeys={selectLine.bindKey || []}
         onChange={this.onTransferChange}
         showSearch
         render={item => item.name}
