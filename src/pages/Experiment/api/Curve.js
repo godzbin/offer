@@ -29,7 +29,7 @@ export async function getYSettings () {
 
 export async function updateYSetting (params) {
   const { data = [] } = await request(`/curve/${params.key}/yaxle`, {
-    method: 'POST',
+    method: 'PUT',
     body: params
   })
   return data
@@ -37,7 +37,7 @@ export async function updateYSetting (params) {
 
 export async function addYSetting (params) {
   const { data = [] } = await request(`/curve/${params.name}/yaxle`, {
-    method: 'PUT',
+    method: 'POST',
     body: {
       ...params,
       key: params.name

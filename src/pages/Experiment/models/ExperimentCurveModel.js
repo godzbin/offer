@@ -82,7 +82,7 @@ export default {
 			return { ...state, equipmentInfo: payload }
 		},
 		setDataList (state, { payload = [] }) {
-			const { dataList } = state
+			const { dataList = [] } = state
 			const time = new Date()
 			//  保留 半个小时数据
 			const maxLength = 60 * 60 * 0.5 / 5
@@ -92,21 +92,23 @@ export default {
 					value: null
 				})
 			})
-			payload.forEach((item) => {
-				const keyData = dataList.find((dItem) => dItem.key === item.key)
-				if (keyData) {
-					const { value = [] } = keyData
-					value[value.length - 1].value = item.value
-					if (value.length > maxLength) {
-						value.shift()
+			if (payload) { 
+				payload.forEach((item = {}) => {
+					const keyData = dataList.find((dItem) => dItem.key === item.key)
+					if (keyData) {
+						const { value = [] } = keyData
+						value[value.length - 1].value = item.value
+						if (value.length > maxLength) {
+							value.shift()
+						}
+					} else {
+						dataList.push({
+							key: item.key,
+							value: [{ time, value: item.value }]
+						})
 					}
-				} else {
-					dataList.push({
-						key: item.key,
-						value: [{ time, value: item.value }]
-					})
-				}
-			})
+				})
+			}
 			return { ...state, dataList }
 		},
 		setYSettings (state, { payload }) {

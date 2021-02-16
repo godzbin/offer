@@ -346,7 +346,7 @@ class Curve extends PureComponent {
   }
 
   onConfigChange = async (yConfig) => {
-    const { dispatch } = this.props
+    const { dispatch, ExperimentCurve: { keyList } } = this.props
     if (yConfig.key) {
       await dispatch({
         type: 'ExperimentCurve/changeYConfig',
@@ -355,7 +355,9 @@ class Curve extends PureComponent {
     } else {
       await dispatch({
         type: 'ExperimentCurve/addYConfig',
-        payload: yConfig
+        payload: Object.assign({}, yConfig, {
+          bindKey: keyList.map((item) => item.key)
+        })
       })
     }
     await dispatch({
