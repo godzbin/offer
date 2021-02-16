@@ -88,7 +88,7 @@ class Curve extends PureComponent {
             ...keyData,
             ...data,
             key,
-            value: lastValue.value || '',
+            value: lastValue.value || lastValue.value === 0 ? lastValue.value : '',
             color,
             unit: keyData.unit
           }
@@ -269,7 +269,7 @@ class Curve extends PureComponent {
       </p>
       <div className={styles.detailDataChildContent}>
         <p className={styles.detailDataChildContentValue} style={{ color: this.getColorByKey(item.key) }}>
-          {Number(item.value) ? Number(item.value).toFixed(2) : ''}
+          {item.value === '' || item.value === null ? '' : (Number(item.value))}
         </p>
       </div>
       <span className={styles.detailDataChildContentUnit}>{item.unit}</span>
