@@ -58,6 +58,9 @@ class Curve extends PureComponent {
     await dispatch({
       type: 'ExperimentCurve/getData'
     })
+    await dispatch({
+      type: 'ExperimentCurve/getEquipmentInfo'
+    })
     this.renderChart()
   }
 
